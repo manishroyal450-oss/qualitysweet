@@ -1,0 +1,1686 @@
+import { MenuItem } from './types';
+
+export const INITIAL_SWEETS: MenuItem[] = [
+  {
+    id: 'sw-0',
+    name: 'Quality Special Shahi Barfi',
+    description: 'Our signature premium sweet crafted with pure desi ghee, organic saffron infusions, and rich khoya, decorated with genuine silver leaf.',
+    price: 450,
+    category: 'Desi Ghee Sweets',
+    image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 5.0,
+    popular: true
+  },
+  {
+    id: 'sw-1',
+    name: 'Kaju Katli (Premium)',
+    description: 'Traditional diamond-shaped cashew fudge made with premium cashews and pure silver leaves. Rich, melt-in-the-mouth texture.',
+    price: 350,
+    category: 'Dry Fruit Sweets',
+    image: 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-2',
+    name: 'Desi Ghee Gulab Jamun',
+    description: 'Soft, golden-brown berry-sized balls made with khoya, fried in pure desi ghee, and soaked in cardamom-infused sugar syrup.',
+    price: 180,
+    category: 'Desi Ghee Sweets',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'sw-3',
+    name: 'Saffron Rasmalai',
+    description: 'Soft, spongy cottage cheese patties flattened and soaked in thick, creamy sweetened saffron milk (rabdi) topped with pistachios.',
+    price: 240,
+    category: 'Milk Sweets',
+    image: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-4',
+    name: 'Spongy Bengali Rasgulla',
+    description: 'Soft, juicy, and extremely spongy white chenna balls simmered in a delicate, light sugar syrup. Authentic Bengali style.',
+    price: 150,
+    category: 'Bengali Sweets',
+    image: 'https://images.unsplash.com/photo-1590080875515-8a3a8dc5735e?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'sw-5',
+    name: 'Motichoor Ladoo (Ghee)',
+    description: 'Tiny, fine gram flour pearls fried in pure ghee, blended with sugar syrup, melon seeds, and compressed into delicious ladoos.',
+    price: 160,
+    category: 'Desi Ghee Sweets',
+    image: 'https://images.unsplash.com/photo-1605698801267-33ee892bf3f0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'sw-6',
+    name: 'Kesar Pista Roll',
+    description: 'A decadent combination of rich cashew and pistachio layers rolled together, subtly infused with premium Kashmiri saffron.',
+    price: 380,
+    category: 'Dry Fruit Sweets',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'sw-7',
+    name: 'Sugar-Free Anjeer Barfi',
+    description: 'A healthy and guilt-free luxury sweet made from premium figs, dates, almonds, pistachios, and cashews with absolutely zero added sugar.',
+    price: 420,
+    category: 'Sugar Free',
+    image: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.5,
+    isSugarFree: true
+  },
+  {
+    id: 'sw-8',
+    name: 'Pure Milk Cake',
+    description: 'Rich, granular, and slow-cooked milk fudge with caramelized brown centers and soft white edges. Exceptionally sweet and satisfying.',
+    price: 200,
+    category: 'Milk Sweets',
+    image: 'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'sw-9',
+    name: 'Rajasthan Special Ghevar',
+    description: 'A honeycomb-shaped disc sweet made of flour, fried in ghee, and soaked in sugar syrup, coated with thick malai rabdi and nuts.',
+    price: 290,
+    category: 'Desi Ghee Sweets',
+    image: 'https://images.unsplash.com/photo-1589302168068-964664d93dc0?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-10',
+    name: 'Dry Fruit Laddu',
+    description: 'Nutritious energy balls packed with walnuts, almonds, cashews, raisins, and bound together naturally with premium organic dates.',
+    price: 360,
+    category: 'Dry Fruit Sweets',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.4
+  },
+  {
+    id: 'sw-11',
+    name: 'Sugar-Free Dates & Nut Bites',
+    description: 'Delectable, pocket-sized sweet treats crafted with dates and crushed dry fruits. Perfect for active sugar-conscious lifestyles.',
+    price: 340,
+    category: 'Sugar Free',
+    image: 'https://images.unsplash.com/photo-1548365328-8c6db3220e4c?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.6,
+    isSugarFree: true
+  },
+  {
+    id: 'sw-12',
+    name: 'Saffron Peda',
+    description: 'Smooth, semi-soft milk solids cooked delicately with saffron and green cardamom, stamped with traditional floral prints.',
+    price: 170,
+    category: 'Milk Sweets',
+    image: 'https://images.unsplash.com/photo-1505252585461-04db1ebb846d?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  }
+];
+
+export const INITIAL_RESTAURANT: MenuItem[] = [
+  // Pizza (Image: Margherita Pizza styling)
+  {
+    id: 'rt-pz-1',
+    name: 'Margherita Pizza',
+    description: 'Single cheese topping',
+    price: 180,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-pz-2',
+    name: 'Cheese & Veggie Pizza',
+    description: 'Tomato, corn, capsicum & onion topping',
+    price: 150,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-pz-3',
+    name: 'Veg Delight Pizza',
+    description: 'Double Margherita loaded with extra cheese',
+    price: 250,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-pz-4',
+    name: 'Spicy Tango Pizza',
+    description: 'Golden corn, jalapeno & red paprika',
+    price: 180,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-pz-5',
+    name: 'Farm Fresh Pizza',
+    description: 'Onion, capsicum, tomato & mushroom',
+    price: 160,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-pz-6',
+    name: 'Mexican Green Pizza',
+    description: 'Onion, capsicum, tomato & jalapeno',
+    price: 180,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-pz-7',
+    name: 'Super Spicy Jungle Pizza',
+    description: 'Onion, capsicum, jalapeno, red paprika & green chilli',
+    price: 200,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-pz-8',
+    name: "Chef's Veg Special Pizza",
+    description: "Chef's special signature pizza",
+    price: 220,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-pz-9',
+    name: 'Quality Special Pizza',
+    description: 'House special loaded pizza',
+    price: 250,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 5.0,
+    popular: true
+  },
+  {
+    id: 'rt-pz-10',
+    name: 'Paneer Makhni Pizza',
+    description: 'Corn, jalapeno, double paneer, capsicum & olives',
+    price: 280,
+    category: 'Pizza',
+    image: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Soup (Image: Tomato Soup / Manchow Soup styling)
+  {
+    id: 'rt-sp-1',
+    name: 'Veg Manchow Soup',
+    description: 'Spicy Indo-Chinese hot soup loaded with garlic, soy sauce, mixed vegetables, topped with crispy noodles.',
+    price: 90,
+    category: 'Soup',
+    image: 'https://images.unsplash.com/photo-1547592165-e1d17fed6006?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-sp-2',
+    name: 'Veg Hot N Sour',
+    description: 'Thick spicy and sour broth packed with shredded vegetables and mushrooms.',
+    price: 100,
+    category: 'Soup',
+    image: 'https://images.unsplash.com/photo-1547592165-e1d17fed6006?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-sp-3',
+    name: 'Sweet Corn Soup',
+    description: 'Mild, comforting soup with sweet corn kernels and finely minced veggies.',
+    price: 120,
+    category: 'Soup',
+    image: 'https://images.unsplash.com/photo-1547592165-e1d17fed6006?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-sp-4',
+    name: 'Tomato Soup',
+    description: 'Creamy slow-cooked tomato soup garnished with fresh cream and crispy bread croutons.',
+    price: 120,
+    category: 'Soup',
+    image: 'https://images.unsplash.com/photo-1547592165-e1d17fed6006?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7,
+    popular: true
+  },
+
+  // Pasta (Image: Pasta styling)
+  {
+    id: 'rt-pa-1',
+    name: 'Pasta White Sauce (Half)',
+    description: 'Creamy white sauce penne pasta with sweet corn and herbs.',
+    price: 100,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-pa-2',
+    name: 'Pasta White Sauce (Full)',
+    description: 'Rich, creamy white sauce penne pasta loaded with cheese and vegetables.',
+    price: 180,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-pa-3',
+    name: 'Pasta Red Sauce (Half)',
+    description: 'Tangy tomato-basil red sauce penne pasta with garlic.',
+    price: 100,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-pa-4',
+    name: 'Pasta Red Sauce (Full)',
+    description: 'Zesty red sauce penne pasta garnished with parmesan cheese and basil.',
+    price: 180,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-pa-5',
+    name: 'Mix Sauce Pasta (Half)',
+    description: 'Perfect blend of red and white sauces for an exquisite pink sauce pasta.',
+    price: 100,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-pa-6',
+    name: 'Mix Sauce Pasta (Full)',
+    description: 'Premium pink sauce penne pasta cooked to absolute perfection with delicious veggies.',
+    price: 180,
+    category: 'Pasta',
+    image: 'https://images.unsplash.com/photo-1563379091339-03b21ab4a4f8?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Sandwich (Image: Grilled Sandwich)
+  {
+    id: 'rt-sd-1',
+    name: 'Veg Grilled Sandwich',
+    description: 'Stuffed with fresh vegetables and dynamic green chutney, perfectly toasted.',
+    price: 80,
+    category: 'Sandwich',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-sd-2',
+    name: 'Corn Grilled Sandwich',
+    description: 'Loaded with sweet corn, rich mayonnaise, and toasted herbs.',
+    price: 80,
+    category: 'Sandwich',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-sd-3',
+    name: 'Paneer Grilled Sandwich',
+    description: 'Fresh spiced paneer slices grilled in professional double plates.',
+    price: 100,
+    category: 'Sandwich',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-sd-4',
+    name: 'Cheese Grilled Sandwich',
+    description: 'Stuffed with dynamic melting cheddar and mozzarella cheese and slow grilled.',
+    price: 100,
+    category: 'Sandwich',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7,
+    popular: true
+  },
+  {
+    id: 'rt-sd-5',
+    name: 'Paneer Cheese Grilled Sandwich',
+    description: 'Ultimate combination of delicious paneer, melting cheese, and custom herbs.',
+    price: 120,
+    category: 'Sandwich',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Fast Food (Image: Dhokla / Fast food)
+  {
+    id: 'rt-ff-1',
+    name: 'Chole Bhature',
+    description: 'Two fluffy bhaturas served with spicy authentic dark chickpeas masala, onions and pickles.',
+    price: 80,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-ff-2',
+    name: 'Chole Kulche',
+    description: 'Soft tandoori kulchas with yellow-peas chole curry topped with coriander and ginger juliennes.',
+    price: 80,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ff-3',
+    name: 'Pav Bhaji',
+    description: 'Spicy mashed mixed vegetable bhaji topped with rich butter, served with two toasted pavs.',
+    price: 80,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ff-4',
+    name: 'Plain Samosa',
+    description: 'Crispy golden triangle pastry stuffed with spiced potato and green peas mash.',
+    price: 15,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-ff-5',
+    name: 'Bread Pakora (Half)',
+    description: 'Gram flour coated fried bread triangle.',
+    price: 20,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-ff-6',
+    name: 'Bread Pakora (Full)',
+    description: 'Flour coated deep fried bread stuffed with spiced potato mash.',
+    price: 40,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ff-7',
+    name: 'Paneer Bread Pakora (Half)',
+    description: 'Bread pakora stuffed with paneer slice (Half size).',
+    price: 30,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ff-8',
+    name: 'Paneer Bread Pakora (Full)',
+    description: 'Delicious bread pakora stuffed with a thick slab of spiced cottage cheese (Paneer).',
+    price: 60,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-ff-9',
+    name: 'Paneer Pakori',
+    description: 'Crispy and spiced cottage cheese fritters fried in gram flour. Price per 200 GM.',
+    price: 100,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ff-10',
+    name: 'Dhokla',
+    description: 'Spongy and tangy steamed Gujarati gram flour cakes with mustard tempering. Price per 250 GM.',
+    price: 60,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-ff-11',
+    name: 'Patties',
+    description: 'Layered and extremely crispy puff pastry turnover stuffed with seasoned potato.',
+    price: 25,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.4
+  },
+
+  // Noodles (Image: Hakka Noodles)
+  {
+    id: 'rt-nd-1',
+    name: 'Veg Noodles (Half)',
+    description: 'Stir-fried noodles with crisp cabbage, capsicum, carrots, and light soy sauce.',
+    price: 60,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-nd-2',
+    name: 'Veg Noodles (Full)',
+    description: 'Delicious street-style vegetable noodles tossed with seasoning and crisp greens.',
+    price: 100,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-nd-3',
+    name: 'Hakka Noodles (Half)',
+    description: 'Classic Chinese stir-fry with dynamic seasonings (Half portion).',
+    price: 70,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-nd-4',
+    name: 'Hakka Noodles (Full)',
+    description: 'Flavorsome street-style Hakka noodles loaded with shredded spring onions and custom oils.',
+    price: 120,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-nd-5',
+    name: 'Chilli Garlic Noodles (Half)',
+    description: 'Spicy noodles stir-fried with hot garlic paste (Half portion).',
+    price: 80,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-nd-6',
+    name: 'Chilli Garlic Noodles (Full)',
+    description: 'Hot wok-tossed noodles packed with garlic, red chillies, and mixed fresh veggies.',
+    price: 150,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-nd-7',
+    name: 'Hongkong Noodles (Half)',
+    description: 'Sweet and savory seasoned noodles with mild garlic.',
+    price: 100,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-nd-8',
+    name: 'Hongkong Noodles (Full)',
+    description: 'Stir-fried noodles with sweet-tangy spices and a rich splash of sesame and light soy.',
+    price: 180,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-nd-9',
+    name: 'Singapoori Noodles (Half)',
+    description: 'Noodles seasoned with turmeric curry powder and light sauces.',
+    price: 120,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-nd-10',
+    name: 'Singapoori Noodles (Full)',
+    description: 'Deliciously aromatic stir-fry noodles tossed with curry powder, sweet peppers, and paneer bits.',
+    price: 200,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-nd-11',
+    name: 'Shezwan Noodles (Half)',
+    description: 'Fiery noodles in pungent Sichuan red chilli sauce.',
+    price: 100,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-nd-12',
+    name: 'Shezwan Noodles (Full)',
+    description: 'Extra hot and tangy noodles stir-fried in authentic Sichuan pepper chilli sauce.',
+    price: 180,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-nd-13',
+    name: 'Paneer Butter Noodles (Half)',
+    description: 'Noodles tossed with butter and paneer slices.',
+    price: 100,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-nd-14',
+    name: 'Paneer Butter Noodles (Full)',
+    description: 'Decadent noodles rich in creamy butter, packed with sautéed paneer chunks and spices.',
+    price: 180,
+    category: 'Noodles',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Momos (Image: Momos basket)
+  {
+    id: 'rt-mm-1',
+    name: 'Veg Steam Momos (Half)',
+    description: 'Delicate steamed dumplings with seasonal vegetables.',
+    price: 60,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-mm-2',
+    name: 'Veg Steam Momos (Full)',
+    description: 'Steamed delicate dumplings stuffed with finely minced seasoned garden vegetables.',
+    price: 120,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-mm-3',
+    name: 'Veg Fry Momos (Half)',
+    description: 'Deep-fried vegetable momos (Half portion).',
+    price: 70,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-mm-4',
+    name: 'Veg Fry Momos (Full)',
+    description: 'Crispy golden deep-fried vegetable dumplings served with spicy Schezwan chutney.',
+    price: 140,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-5',
+    name: 'Veg Kurkure Momos (Half)',
+    description: 'Extra crunchy breaded fried momos (Half portion).',
+    price: 80,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-6',
+    name: 'Veg Kurkure Momos (Full)',
+    description: 'Super crunchy outer crust momos coated with crispy breading and deep-fried.',
+    price: 150,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-mm-7',
+    name: 'Paneer Steam Momos (Half)',
+    description: 'Steamed dumplings stuffed with cottage cheese.',
+    price: 80,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-mm-8',
+    name: 'Paneer Steam Momos (Full)',
+    description: 'Soft steamed dumplings filled with rich spiced paneer chunks and fresh onions.',
+    price: 160,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-9',
+    name: 'Paneer Fry Momos (Half)',
+    description: 'Crispy fried momos stuffed with paneer (Half portion).',
+    price: 90,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-mm-10',
+    name: 'Paneer Fry Momos (Full)',
+    description: 'Deliciously fried dumplings with rich cottage cheese stuffing.',
+    price: 180,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-11',
+    name: 'Paneer Kurkure Momos (Half)',
+    description: 'Super crunchy cornflake crusted paneer momos.',
+    price: 100,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-12',
+    name: 'Paneer Kurkure Momos (Full)',
+    description: 'Ultimate crunchy paneer-filled momos fried to golden perfection.',
+    price: 180,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9
+  },
+  {
+    id: 'rt-mm-13',
+    name: 'Cheese Corn Steam Momos (Half)',
+    description: 'Steamed sweet corn and processed cheese filled dim sums.',
+    price: 80,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-mm-14',
+    name: 'Cheese Corn Steam Momos (Full)',
+    description: 'Spongy hot steamed dumplings bursting with sweet corn kernels and melted mozzarella.',
+    price: 150,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-15',
+    name: 'Cheese Corn Fry Momos (Half)',
+    description: 'Crispy fried momos filled with cheese and sweet corn.',
+    price: 90,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-mm-16',
+    name: 'Cheese Corn Fry Momos (Full)',
+    description: 'Golden-fried dim sums containing premium sweet corn and delicious cheese.',
+    price: 170,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9
+  },
+  {
+    id: 'rt-mm-17',
+    name: 'Cheese Corn Kurkure Momos (Half)',
+    description: 'Spiced crunchy fried momos packed with sweet corn and cheese.',
+    price: 100,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9
+  },
+  {
+    id: 'rt-mm-18',
+    name: 'Cheese Corn Kurkure Momos (Full)',
+    description: 'Unbelievably delicious crunchy momos filled with sweet corn and melting mozzarella cheese.',
+    price: 190,
+    category: 'Momos',
+    image: 'https://images.unsplash.com/photo-1625220194771-7ebedd0b70b9?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 5.0,
+    popular: true
+  },
+
+  // Burger (Image: Burger)
+  {
+    id: 'rt-bg-1',
+    name: 'Veg Burger',
+    description: 'Crispy vegetable patty with fresh lettuce and custom mayonnaise.',
+    price: 50,
+    category: 'Burger',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-bg-2',
+    name: 'Paneer Burger',
+    description: 'Soft toasted bun layering a crispy paneer patty, onions, and tandoori spread.',
+    price: 60,
+    category: 'Burger',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-bg-3',
+    name: 'Cheese Burger',
+    description: 'Crispy vegetable patty topped with melting cheddar cheese slice and dill pickles.',
+    price: 70,
+    category: 'Burger',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-bg-4',
+    name: 'Paneer Cheese Burger',
+    description: 'Rich crispy paneer patty topped with melted cheese, lettuce, and premium burger sauce.',
+    price: 80,
+    category: 'Burger',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Golgappe (Image: Panipuri)
+  {
+    id: 'rt-gg-1',
+    name: 'Suji Golgappe Pani',
+    description: 'Crispy semolina hollow balls filled with customized dry herbs water.',
+    price: 30,
+    category: 'Golgappe',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-gg-2',
+    name: 'Suji Golgappe Dahi',
+    description: 'Semolina shells loaded with potato, sweet curd, and sweet tamarind sauce.',
+    price: 40,
+    category: 'Golgappe',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-gg-3',
+    name: 'Aata Golgappe Pani',
+    description: 'Traditional wheat flour golgappa shells served with chilled herbal spicy mint water.',
+    price: 30,
+    category: 'Golgappe',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-gg-4',
+    name: 'Aata Golgappe Dahi',
+    description: 'Traditional wheat shells served with sweet yoghurt and dynamic chutneys.',
+    price: 40,
+    category: 'Golgappe',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+
+  // Chaat (Image: Dahi bhalla)
+  {
+    id: 'rt-ct-1',
+    name: 'Dahi Bhalla',
+    description: 'Super soft lentil dumplings soaked in thick sweet whipped yogurt, garnished with red and green chutneys.',
+    price: 40,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-ct-2',
+    name: 'Bhalla Papdi',
+    description: 'Comforting combination of soft dahi bhalla and crunchy spiced papdi plates.',
+    price: 60,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ct-3',
+    name: 'Papdi Chaat',
+    description: 'Crispy papdis layered with spiced potatoes, chickpeas, whipped yoghurt, and dynamic coriander.',
+    price: 50,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ct-4',
+    name: 'Raj Kachori',
+    description: 'The ultimate royal chat! A large crispy hollow shell filled with sprouts, potatoes, yogurt, sev and pomegranate.',
+    price: 80,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-ct-5',
+    name: 'Madhuban Bhalla',
+    description: 'Soft melt-in-the-mouth heritage lentil dumplings topped with organic spices and raisins.',
+    price: 80,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ct-6',
+    name: 'Aaloo Tikki (Half)',
+    description: 'Pan-fried potato patty with mint chutney (Half portion).',
+    price: 30,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-ct-7',
+    name: 'Aaloo Tikki (Full)',
+    description: 'Golden shallow-fried crisp potato patties served with chickpeas, tamarind, and green chilli dressings.',
+    price: 60,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ct-8',
+    name: 'Samosa Chaat (Half)',
+    description: 'Crushed samosa with warm chole and herbs (Half portion).',
+    price: 30,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ct-9',
+    name: 'Samosa Chaat (Full)',
+    description: 'Scrumptious samosa crushed and topped with piping hot chickpeas gravy, onions, sweet curd, and dynamic spices.',
+    price: 50,
+    category: 'Chaat',
+    image: 'https://images.unsplash.com/photo-1601050690597-df056fb4ce78?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+
+  // South Indian (Image: Dosa)
+  {
+    id: 'rt-si-1',
+    name: 'Paper Dosa',
+    description: 'Paper-thin golden-toasted crispy crepe served with hot sambhar and fresh coconut chutney.',
+    price: 80,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-si-2',
+    name: 'Masala Dosa',
+    description: 'Crispy thin crepe stuffed with golden spiced potato and onion mash.',
+    price: 100,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-si-3',
+    name: 'Mix Dosa',
+    description: 'Thin crepe infused with seasoned green vegetables, served hot with side dips.',
+    price: 120,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-si-4',
+    name: 'Onion Dosa',
+    description: 'Thin crepe loaded with finely chopped crisp red onions and aromatic coriander.',
+    price: 120,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-si-5',
+    name: 'Paneer Dosa',
+    description: 'Golden crepe filled with a generous stuffing of delicious grated paneer and Indian spices.',
+    price: 140,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-si-6',
+    name: 'Uttapam',
+    description: 'Thick, soft savory pancake topped with finely chopped onions, tomatoes, and green chillies.',
+    price: 150,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-si-7',
+    name: 'Idli Sambhar',
+    description: 'Two soft and spongy steamed rice cakes served with hot vegetable stew.',
+    price: 80,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-si-8',
+    name: 'Idli Fried',
+    description: 'Steamed idli cubes fried in wok with mustard seeds, curry leaves, and spices.',
+    price: 80,
+    category: 'South Indian',
+    image: 'https://images.unsplash.com/photo-1668236543090-82eba5ee5976?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+
+  // Dessert (Image: Gulab Jamun)
+  {
+    id: 'rt-ds-1',
+    name: 'Gulab Jamun (1 Pc)',
+    description: 'One piece of juicy milk-solid dumpling fried in desi ghee.',
+    price: 15,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ds-2',
+    name: 'Gulab Jamun (2 Pcs)',
+    description: 'Two pieces of warm, soft gulab jamuns dipped in rich cardamom syrup.',
+    price: 30,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-ds-3',
+    name: 'Sponge Rasgulla (1 Pc)',
+    description: 'One sweet spongy white cheese dumpling cooked in sugar syrup.',
+    price: 25,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-ds-4',
+    name: 'Sponge Rasgulla (2 Pcs)',
+    description: 'Two traditional juicy spongy chenna rasgullas.',
+    price: 50,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ds-5',
+    name: 'Rasmalai (1 Pc)',
+    description: 'One cottage cheese patty soaked in thick milk rabdi with saffron.',
+    price: 30,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-ds-6',
+    name: 'Rasmalai (2 Pcs)',
+    description: 'Two pieces of royal Rasmalai patties topped with premium pistachios and saffron strands.',
+    price: 60,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-ds-7',
+    name: 'Malai Roll',
+    description: 'Soft rolls rich with thick milk cream and sweet aromatic cardamom.',
+    price: 50,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-ds-8',
+    name: 'Malai Roll Sandwich',
+    description: 'Thick malai roll sandwich layered with dry fruits and saffron paste.',
+    price: 50,
+    category: 'Dessert',
+    image: 'https://images.unsplash.com/photo-1527751171053-6ac5ec50000b?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9
+  },
+
+  // Pastry (Image: Chocolate pastry tray)
+  {
+    id: 'rt-ps-1',
+    name: 'Red Velvet',
+    description: 'A luxurious rich red velvet pastry slice layered with velvet cream cheese.',
+    price: 40,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ps-2',
+    name: 'Chocolate',
+    description: 'Indulgent, moist chocolate sponge pastry covered in rich dark chocolate.',
+    price: 35,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-ps-3',
+    name: 'Butterscotch',
+    description: 'Pastry slice layering smooth cream with butterscotch syrup and crunchy nuts.',
+    price: 30,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-ps-4',
+    name: 'Honey Almond',
+    description: 'Delicious vanilla base pastry coated in thick wild honey and almond slivers.',
+    price: 30,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-ps-5',
+    name: 'Pineapple',
+    description: 'Fresh and juicy pineapple chunks mixed with whipped cream and light sponge layers.',
+    price: 30,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-ps-6',
+    name: 'Donut',
+    description: 'Sweet glazed rings coated in rich milk chocolate and white confectionery strips.',
+    price: 30,
+    category: 'Pastry',
+    image: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+
+  // Chinese Starter (Image: Chilli Potato / Chinese)
+  {
+    id: 'rt-cs-1',
+    name: 'Dry Manchurian',
+    description: 'Crispy deep-fried mixed vegetable balls tossed in a tangy soy-chilli gravy.',
+    price: 80,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-cs-2',
+    name: 'Manchurian Gravy',
+    description: 'Crispy vegetable balls simmered in tangy, hot, garlic-infused soy gravy.',
+    price: 80,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-cs-3',
+    name: 'Veg Spring Roll',
+    description: 'Crispy flaky wrappers stuffed with stir-fried cabbage, carrots, onions, and garlic.',
+    price: 80,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-cs-4',
+    name: 'Chilli Potato (Half)',
+    description: 'Crispy finger fries tossed in chilli sauce (Half portion).',
+    price: 80,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-cs-5',
+    name: 'Chilli Potato (Full)',
+    description: 'Golden fried crispy potato fingers wok-tossed in zesty red garlic and soy sauces.',
+    price: 150,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-cs-6',
+    name: 'Honey Chilli Potato (Half)',
+    description: 'Crispy sweet and spicy potato fries (Half portion).',
+    price: 90,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-cs-7',
+    name: 'Honey Chilli Potato (Full)',
+    description: 'Sweet, spicy, and extremely crispy potato fries glazed with pure honey, chillies and sesame.',
+    price: 160,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-cs-8',
+    name: 'French Fries',
+    description: 'Classic salted potato finger fries cooked to a perfect crispy golden finish.',
+    price: 80,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-cs-9',
+    name: 'Peri Peri French Fries',
+    description: 'Crispy potato fries dusted heavily in spicy African Peri Peri herb powder.',
+    price: 90,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-cs-10',
+    name: 'Chilli Paneer (Half)',
+    description: 'Wok-tossed paneer cubes with bell peppers (Half portion).',
+    price: 150,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-cs-11',
+    name: 'Chilli Paneer (Full)',
+    description: 'Soft cottage cheese cubes tossed with bell peppers, onions, ginger, and hot Chinese seasonings.',
+    price: 250,
+    category: 'Chinese Starter',
+    image: 'https://images.unsplash.com/photo-1525755662778-989d0524087e?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+
+  // Kathi Roll (Image: Roll)
+  {
+    id: 'rt-kr-1',
+    name: 'Veg Kathi Roll',
+    description: 'Indian flatbread wrap stuffed with sautéed shredded veggies, dynamic green chutney and spices.',
+    price: 100,
+    category: 'Kathi Roll',
+    image: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-kr-2',
+    name: 'Paneer Kathi Roll',
+    description: 'Perfect flatbread wrap loaded with marinated spiced paneer cubes, capsicum, and sliced onions.',
+    price: 130,
+    category: 'Kathi Roll',
+    image: 'https://images.unsplash.com/photo-1626132647523-66f5bf380027?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+
+  // Rice & Maggie (Image: Veg Fried Rice)
+  {
+    id: 'rt-rm-1',
+    name: 'Veg Fried Rice',
+    description: 'Premium steamed basmati rice stir-fried in a wok with fresh vegetables and light seasonings.',
+    price: 80,
+    category: 'Rice & Maggie',
+    image: 'https://images.unsplash.com/photo-1603133872878-696a548e763f?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-rm-2',
+    name: 'Shezwan Fried Rice',
+    description: 'Flavorsome basmati rice stir-fried in wok with hot Sichuan spices and minced greens.',
+    price: 100,
+    category: 'Rice & Maggie',
+    image: 'https://images.unsplash.com/photo-1603133872878-696a548e763f?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-rm-3',
+    name: 'Plain Maggie',
+    description: 'Traditional and extremely satisfying 2-minute instant noodles cooked with mild spices.',
+    price: 60,
+    category: 'Rice & Maggie',
+    image: 'https://images.unsplash.com/photo-1603133872878-696a548e763f?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-rm-4',
+    name: 'Cheese Maggie',
+    description: 'Instant yellow noodles cooked with vegetables and heavily topped with processed cheese.',
+    price: 100,
+    category: 'Rice & Maggie',
+    image: 'https://images.unsplash.com/photo-1603133872878-696a548e763f?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-rm-5',
+    name: 'Butter Paneer Fried Rice',
+    description: 'Rich buttery fried rice loaded with chunks of golden fried cottage cheese.',
+    price: 150,
+    category: 'Rice & Maggie',
+    image: 'https://images.unsplash.com/photo-1603133872878-696a548e763f?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+
+  // Beverages (Image: Lassi clay cups)
+  {
+    id: 'rt-bv-1',
+    name: 'Tea',
+    description: 'Warm and refreshing traditional ginger cardamom infused milk tea.',
+    price: 30,
+    category: 'Beverages',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-bv-2',
+    name: 'Coffee',
+    description: 'Rich frothy milk coffee whipped perfectly with premium aromatic beans.',
+    price: 40,
+    category: 'Beverages',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-bv-3',
+    name: 'Lassi',
+    description: 'Thick, sweet, frothy yogurt lassi served in authentic earthen kulhad, topped with pistachios.',
+    price: 30,
+    category: 'Beverages',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-bv-4',
+    name: 'Cold Drink',
+    description: 'Chilled soft beverage bottle (Served as per MRP).',
+    price: 40,
+    category: 'Beverages',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.5
+  },
+  {
+    id: 'rt-bv-5',
+    name: 'Water Bottle',
+    description: 'Chilled sealed mineral water bottle (Served as per MRP).',
+    price: 20,
+    category: 'Beverages',
+    image: 'https://images.unsplash.com/photo-1553530666-ba11a7da3888?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.4
+  }
+];
+
+export const SWEET_CATEGORIES = [
+  'All',
+  'Desi Ghee Sweets',
+  'Milk Sweets',
+  'Bengali Sweets',
+  'Dry Fruit Sweets',
+  'Sugar Free'
+];
+
+export const RESTAURANT_CATEGORIES = [
+  'All',
+  'Pizza',
+  'Soup',
+  'Pasta',
+  'Sandwich',
+  'Fast Food',
+  'Noodles',
+  'Momos',
+  'Burger',
+  'Golgappe',
+  'Chaat',
+  'South Indian',
+  'Dessert',
+  'Pastry',
+  'Chinese Starter',
+  'Kathi Roll',
+  'Rice & Maggie',
+  'Beverages'
+];

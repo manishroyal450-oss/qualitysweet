@@ -1,0 +1,6 @@
+{
+  "name": "Madhuram Sweets & Restaurant",
+  "description": "A premium merged platform featuring a Sweet Shop with 500 item capacity and a Restaurant with 200 item capacity, with separate interfaces, search, categories, and shopping cart.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
