@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { MenuItem, CartItem, ViewMode, Order, UserProfile } from './types';
 import { 
   INITIAL_SWEETS, 
@@ -6,6 +6,7 @@ import {
   SWEET_CATEGORIES, 
   RESTAURANT_CATEGORIES 
 } from './data';
+import { fetchCatalogFromSheet } from './services/sheetCatalog';
 import Navbar from './components/Navbar';
 import HomeView from './components/HomeView';
 import CatalogView from './components/CatalogView';
@@ -13,9 +14,12 @@ import DashboardView from './components/DashboardView';
 import CartView from './components/CartView';
 import AdminView from './components/AdminView';
 import ProfileView from './components/ProfileView';
-import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X } from 'lucide-react';
+import AiAssistantWidget from './components/AiAssistantWidget';
+import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X, Sparkles, Bot } from 'lucide-react';
 
 export default function App() {
+  // AI Assistant State
+  const [isAiAssistantOpen, setIsAiAssistantOpen] = useState(false);
   // Active User State
   const [activeUser, setActiveUser] = useState<UserProfile | null>(() => {
     const activeUserStr = localStorage.getItem('activeUser');
@@ -29,13 +33,141 @@ export default function App() {
     return null;
   });
 
-  // Navigation State
+  // Navigation State & Back Navigation History Stack
   const [view, setView] = useState<ViewMode>('home');
+  const [historyStack, setHistoryStack] = useState<ViewMode[]>(['home']);
   const [showWhatsappPopup, setShowWhatsappPopup] = useState(true);
 
+  // Initialize browser history and popstate listener for device & mobile back button support
+  useEffect(() => {
+    if (!window.history.state || !window.history.state.view) {
+      window.history.replaceState({ view: 'home' }, '', '');
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      if (isAiAssistantOpen) {
+        setIsAiAssistantOpen(false);
+        return;
+      }
+      if (event.state && event.state.view) {
+        setView(event.state.view as ViewMode);
+      } else {
+        setView('home');
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, [isAiAssistantOpen]);
+
+  // Unified Navigate handler with browser history push
+  const navigateTo = (nextView: ViewMode, replace: boolean = false) => {
+    if (nextView === view) return;
+    if (replace) {
+      window.history.replaceState({ view: nextView }, '', '');
+    } else {
+      window.history.pushState({ view: nextView }, '', '');
+      setHistoryStack((prev) => [...prev, nextView]);
+    }
+    setView(nextView);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  // Back Navigation handler
+  const handleGoBack = () => {
+    if (isAiAssistantOpen) {
+      setIsAiAssistantOpen(false);
+      return;
+    }
+    if (window.history.length > 1 && historyStack.length > 1) {
+      window.history.back();
+    } else {
+      navigateTo('home', true);
+    }
+  };
+
+  // Helpers to read deleted product IDs and custom products from localStorage
+  const getDeletedIds = (): Set<string> => {
+    try {
+      const str = localStorage.getItem('deleted_product_ids');
+      if (str) return new Set(JSON.parse(str));
+    } catch (e) {
+      console.error(e);
+    }
+    return new Set();
+  };
+
+  const getCustomSweets = (): MenuItem[] => {
+    try {
+      const str = localStorage.getItem('custom_sweets');
+      if (str) return JSON.parse(str);
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  };
+
+  const getCustomRestaurant = (): MenuItem[] => {
+    try {
+      const str = localStorage.getItem('custom_restaurant');
+      if (str) return JSON.parse(str);
+    } catch (e) {
+      console.error(e);
+    }
+    return [];
+  };
+
   // Items State
-  const [sweets, setSweets] = useState<MenuItem[]>(INITIAL_SWEETS);
-  const [restaurant, setRestaurant] = useState<MenuItem[]>(INITIAL_RESTAURANT);
+  const [sweets, setSweets] = useState<MenuItem[]>(() => {
+    const deleted = getDeletedIds();
+    const custom = getCustomSweets();
+    const initial = [...custom, ...INITIAL_SWEETS];
+    return initial.filter(item => !deleted.has(item.id));
+  });
+
+  const [restaurant, setRestaurant] = useState<MenuItem[]>(() => {
+    const deleted = getDeletedIds();
+    const custom = getCustomRestaurant();
+    const initial = [...custom, ...INITIAL_RESTAURANT];
+    return initial.filter(item => !deleted.has(item.id));
+  });
+
+  // Auto-sync Google Sheet Catalog
+  useEffect(() => {
+    async function loadSheetData() {
+      const sheetItems = await fetchCatalogFromSheet();
+      if (sheetItems && sheetItems.length > 0) {
+        const deleted = getDeletedIds();
+
+        const sweetItems = sheetItems
+          .filter(i => i.type === 'sweet' || i.category.toLowerCase().includes('fast food') || i.category.toLowerCase().includes('snack'))
+          .filter(i => !deleted.has(i.id));
+
+        const restItems = sheetItems
+          .filter(i => i.type === 'restaurant')
+          .filter(i => !deleted.has(i.id));
+
+        if (sweetItems.length > 0) {
+          setSweets(prev => {
+            const filteredPrev = prev.filter(p => !deleted.has(p.id));
+            const existingNames = new Set(filteredPrev.map(p => p.name.toLowerCase()));
+            const newToAdd = sweetItems.filter(s => !existingNames.has(s.name.toLowerCase()));
+            return [...filteredPrev, ...newToAdd];
+          });
+        }
+
+        if (restItems.length > 0) {
+          setRestaurant(prev => {
+            const filteredPrev = prev.filter(p => !deleted.has(p.id));
+            const existingNames = new Set(filteredPrev.map(p => p.name.toLowerCase()));
+            const newToAdd = restItems.filter(r => !existingNames.has(r.name.toLowerCase()));
+            return [...filteredPrev, ...newToAdd];
+          });
+        }
+      }
+    }
+    loadSheetData();
+  }, []);
 
   // Cart State
   const [cart, setCart] = useState<CartItem[]>([]);
@@ -61,24 +193,53 @@ export default function App() {
   // Item Addition / Removal Managers
   const handleAddItem = (item: MenuItem) => {
     if (item.type === 'sweet') {
-      if (sweets.length >= 500) return;
+      if (sweets.length >= 5000) return;
       setSweets((prev) => [item, ...prev]);
+      try {
+        const custom = getCustomSweets();
+        localStorage.setItem('custom_sweets', JSON.stringify([item, ...custom]));
+      } catch (e) {
+        console.error(e);
+      }
     } else {
-      if (restaurant.length >= 200) return;
+      if (restaurant.length >= 4000) return;
       setRestaurant((prev) => [item, ...prev]);
+      try {
+        const custom = getCustomRestaurant();
+        localStorage.setItem('custom_restaurant', JSON.stringify([item, ...custom]));
+      } catch (e) {
+        console.error(e);
+      }
     }
   };
 
   const handleRemoveItem = (id: string) => {
     setSweets((prev) => prev.filter((it) => it.id !== id));
     setRestaurant((prev) => prev.filter((it) => it.id !== id));
+
+    try {
+      const deletedStr = localStorage.getItem('deleted_product_ids') || '[]';
+      const deletedArr: string[] = JSON.parse(deletedStr);
+      if (!deletedArr.includes(id)) {
+        deletedArr.push(id);
+        localStorage.setItem('deleted_product_ids', JSON.stringify(deletedArr));
+      }
+
+      const customS = getCustomSweets().filter(it => it.id !== id);
+      localStorage.setItem('custom_sweets', JSON.stringify(customS));
+
+      const customR = getCustomRestaurant().filter(it => it.id !== id);
+      localStorage.setItem('custom_restaurant', JSON.stringify(customR));
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   // Bulk Mock Generator for Testing Space Constraints
   const handleAddBulkItems = (type: 'sweet' | 'restaurant', count: number) => {
     const isSweet = type === 'sweet';
     const currentList = isSweet ? sweets : restaurant;
-    const limit = isSweet ? 500 : 200;
+    const limit = isSweet ? 5000 : 4000;
     
     if (currentList.length >= limit) return;
 
@@ -175,19 +336,21 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col bg-slate-50 font-sans" id="app-root-container">
-      {/* Top sticky navbar */}
+      {/* Top sticky navbar with Back Button */}
       <Navbar 
         currentView={view} 
-        onViewChange={(v) => setView(v)} 
+        onViewChange={(v) => navigateTo(v)} 
+        onBack={handleGoBack}
         cartCount={cartBadgeCount} 
         activeUser={activeUser}
+        onOpenAiAssistant={() => setIsAiAssistantOpen(true)}
       />
 
       {/* Main Container Wrapper */}
       <main className="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-24 md:pt-12 md:pb-32" id="main-content-wrapper">
         {view === 'home' && (
           <HomeView 
-            onViewChange={(v) => setView(v)} 
+            onViewChange={(v) => navigateTo(v)} 
             sweetCount={sweets.length} 
             restaurantCount={restaurant.length} 
           />
@@ -232,7 +395,7 @@ export default function App() {
             onUpdateQuantity={handleUpdateCartQuantity}
             onRemoveFromCart={handleRemoveFromCart}
             onClearCart={handleClearCart}
-            onBackToShopping={() => setView('home')}
+            onBackToShopping={handleGoBack}
             onOrderPlaced={handleOrderPlaced}
             activeUser={activeUser}
           />
@@ -254,7 +417,7 @@ export default function App() {
 
         {view === 'profile' && (
           <ProfileView 
-            onViewChange={(v) => setView(v)}
+            onViewChange={(v) => navigateTo(v)}
             orders={orders}
             activeUser={activeUser}
             onActiveUserChange={setActiveUser}
@@ -321,8 +484,20 @@ export default function App() {
         </div>
       </footer>
 
-      {/* Persistent Floating WhatsApp Corner Popup & Button */}
-      <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3 pointer-events-auto" id="whatsapp-popup-corner">
+      {/* Persistent Floating Corner Actions (AI Assistant + WhatsApp) */}
+      <div className="fixed bottom-20 sm:bottom-24 right-3 sm:right-6 z-40 flex flex-col items-end gap-2.5 pointer-events-auto" id="floating-actions-corner">
+        {/* AI Search Assistant Floating Button - Positioned ABOVE WhatsApp popup & WhatsApp button */}
+        <button
+          onClick={() => setIsAiAssistantOpen(true)}
+          className="bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white px-3.5 py-2.5 rounded-full shadow-2xl flex items-center gap-2 transition-all hover:scale-105 active:scale-95 border border-emerald-400/30 cursor-pointer font-bold text-xs group"
+          title="Ask AI Assistant for item recommendations"
+          id="ai-assistant-fab"
+        >
+          <Sparkles className="h-4 w-4 text-emerald-200 animate-pulse group-hover:rotate-12 transition-transform" />
+          <span className="font-sans">AI Search Help</span>
+        </button>
+
+        {/* WhatsApp Popup Card */}
         {showWhatsappPopup && (
           <div className="bg-white rounded-2xl border border-slate-100 shadow-2xl p-4 max-w-sm w-72 animate-in fade-in slide-in-from-bottom-5 duration-300 relative text-left">
             {/* Close button */}
@@ -363,12 +538,12 @@ export default function App() {
           </div>
         )}
 
-        {/* Floating Pulsating Button */}
-        <div className="flex gap-2.5 items-center">
+        {/* WhatsApp Floating Action Row */}
+        <div className="flex gap-2 items-center">
           {!showWhatsappPopup && (
             <button
               onClick={() => setShowWhatsappPopup(true)}
-              className="bg-slate-900/90 hover:bg-slate-900 text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg border border-slate-700/50 shadow-md backdrop-blur-sm transition"
+              className="bg-slate-900/90 hover:bg-slate-900 text-white text-[10px] font-black px-2.5 py-1.5 rounded-lg border border-slate-700/50 shadow-md backdrop-blur-sm transition cursor-pointer"
             >
               Need help?
             </button>
@@ -377,18 +552,27 @@ export default function App() {
             href="https://wa.me/916398682424?text=Hello!%20I%20am%20interested%20in%20ordering%20sweets%20/%20food."
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-emerald-600 hover:bg-emerald-700 text-white p-3.5 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 active:scale-95 group relative"
+            className="bg-emerald-600 hover:bg-emerald-700 text-white p-3 rounded-full shadow-2xl flex items-center justify-center transition-transform hover:scale-110 active:scale-95 group relative"
             id="whatsapp-fab"
             title="Chat on WhatsApp"
           >
             {/* Pulsating green ring overlay */}
             <span className="absolute inset-0 rounded-full bg-emerald-600/30 animate-ping pointer-events-none" />
-            <svg className="w-6 h-6 fill-current relative z-10" viewBox="0 0 24 24">
+            <svg className="w-5 h-5 fill-current relative z-10" viewBox="0 0 24 24">
               <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.968C16.628 1.97 14.161.944 11.54.944c-5.44 0-9.866 4.369-9.87 9.8.002 2.042.547 4.039 1.584 5.787L2.176 21.6l5.221-1.354z" />
             </svg>
           </a>
         </div>
       </div>
+
+      {/* AI Assistant Modal Widget */}
+      <AiAssistantWidget 
+        isOpen={isAiAssistantOpen}
+        onClose={() => setIsAiAssistantOpen(false)}
+        allItems={[...sweets, ...restaurant]}
+        onAddToCart={handleAddToCart}
+        onViewChange={(v) => navigateTo(v)}
+      />
     </div>
   );
 }

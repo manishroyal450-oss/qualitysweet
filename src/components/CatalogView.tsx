@@ -36,6 +36,10 @@ const CATEGORY_BANNERS: Record<string, { title: string; image: string }> = {
     title: 'FAST FOOD',
     image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=800&auto=format&fit=crop&q=80'
   },
+  'Snacks': {
+    title: 'INDIAN SNACKS & BITES',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=800&auto=format&fit=crop&q=80'
+  },
   'Noodles': {
     title: 'NOODLES',
     image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=800&auto=format&fit=crop&q=80'

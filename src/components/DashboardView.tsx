@@ -26,8 +26,8 @@ export default function DashboardView({
   onAddBulkItems,
   onClearBulkItems
 }: DashboardViewProps) {
-  const sweetMax = 500;
-  const restaurantMax = 200;
+  const sweetMax = 5000;
+  const restaurantMax = 4000;
 
   const sweetCount = sweets.length;
   const restaurantCount = restaurant.length;
@@ -61,7 +61,7 @@ export default function DashboardView({
           </div>
         </div>
         <p className="text-slate-300 text-sm max-w-2xl">
-          Quality Sweets manages unified food services by enforcing strict database slot reservations. We allocate <strong>500 persistent slots for sweets</strong> to support bulk holiday packaging, and <strong>200 slots for dining items</strong> to guarantee same-day kitchen ingredient freshness.
+          Quality Sweets manages unified food services by enforcing strict database slot reservations. We allocate <strong>5000 persistent slots for sweets</strong> to support bulk holiday packaging, and <strong>4000 slots for dining items</strong> to guarantee same-day kitchen ingredient freshness.
         </p>
       </div>
 
@@ -76,7 +76,7 @@ export default function DashboardView({
                 <p className="text-xs text-slate-500">Dedicated storage for festive orders</p>
               </div>
               <span className="bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full border border-amber-200 uppercase tracking-wider font-sans">
-                500 slots limit
+                5000 SLOTS LIMIT
               </span>
             </div>
 
@@ -173,7 +173,7 @@ export default function DashboardView({
                 <p className="text-xs text-slate-500">Curated gourmet dining limit</p>
               </div>
               <span className="bg-rose-100 text-rose-800 text-xs font-bold px-3 py-1 rounded-full border border-rose-200 uppercase tracking-wider font-sans">
-                200 slots limit
+                4000 SLOTS LIMIT
               </span>
             </div>
 

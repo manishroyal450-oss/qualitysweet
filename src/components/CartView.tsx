@@ -13,7 +13,8 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock,
-  Printer
+  Printer,
+  Compass
 } from 'lucide-react';
 
 interface CartViewProps {
@@ -26,6 +27,27 @@ interface CartViewProps {
   activeUser: UserProfile | null;
 }
 
+// Owner Paytm / UPI Configuration
+const OWNER_UPI_ID = "6398682424@ptyes";
+const SHOP_NAME = "Shivam Agrawal";
+
+// Shop Coordinates (Quality Sweets, Chandpur)
+const SHOP_LAT = 29.1383;
+const SHOP_LNG = 78.2721;
+
+// Haversine Formula for Distance Calculation (in Km)
+function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
+  const R = 6371; // Radius of Earth in km
+  const dLat = (lat2 - lat1) * Math.PI / 180;
+  const dLon = (lon2 - lon1) * Math.PI / 180;
+  const a = 
+    Math.sin(dLat/2) * Math.sin(dLat/2) +
+    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
+    Math.sin(dLon/2) * Math.sin(dLon/2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
+  return R * c; 
+}
+
 export default function CartView({
   cart,
   onUpdateQuantity,
@@ -35,6 +57,73 @@ export default function CartView({
   onOrderPlaced,
   activeUser
 }: CartViewProps) {
+  const [showPaytmQr, setShowPaytmQr] = useState(true);
+  const [isCheckingLocation, setIsCheckingLocation] = useState(false);
+  const [userDistance, setUserDistance] = useState<number | null>(null);
+  const [locationStatus, setLocationStatus] = useState<string | null>(null);
+
+  // Order Delivery Validation Function
+  const checkDeliveryEligibility = (userLat: number, userLng: number) => {
+    const distance = calculateDistance(SHOP_LAT, SHOP_LNG, userLat, userLng);
+    setUserDistance(distance);
+    
+    if (distance <= 5.0) {
+      const msg = "Delivery available! Distance: " + distance.toFixed(2) + " km";
+      setLocationStatus("✅ " + msg);
+      alert(msg);
+      return true;
+    } else {
+      const msg = "Sorry, we only deliver within 5 km. Your location is " + distance.toFixed(2) + " km away.";
+      setLocationStatus("❌ " + msg);
+      alert(msg);
+      return false;
+    }
+  };
+
+  const handleDetectGpsLocation = () => {
+    if (!navigator.geolocation) {
+      alert("Geolocation is not supported by your browser");
+      return;
+    }
+
+    setIsCheckingLocation(true);
+    setLocationStatus("Detecting location...");
+
+    navigator.geolocation.getCurrentPosition(
+      (position) => {
+        setIsCheckingLocation(false);
+        const userLat = position.coords.latitude;
+        const userLng = position.coords.longitude;
+        checkDeliveryEligibility(userLat, userLng);
+      },
+      (error) => {
+        setIsCheckingLocation(false);
+        setLocationStatus("Location access denied or unavailable.");
+        alert("Unable to retrieve your location. Please ensure location access is enabled in your browser: " + error.message);
+      },
+      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
+    );
+  };
+
+  // Helper to open Paytm or trigger UPI link
+  const openPaytm = (amount: number) => {
+    if (amount <= 0) {
+      alert("Kripya cart me items add karein!");
+      return;
+    }
+
+    const encodedName = encodeURIComponent(SHOP_NAME);
+    const note = encodeURIComponent("Quality Sweets Order");
+    const upiUrl = `upi://pay?pa=${OWNER_UPI_ID}&pn=${encodedName}&am=${amount}&cu=INR&tn=${note}`;
+
+    setShowPaytmQr(true);
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.href = upiUrl;
+    }
+  };
   // Form details
   const [orderDetails, setOrderDetails] = useState<OrderDetails>(() => {
     try {
@@ -89,14 +178,75 @@ export default function CartView({
 
   const subtotal = sweetSubtotal + restaurantSubtotal;
   
-  // Taxes: standard 5% GST for sweets and restaurant
-  const gst = Math.round(subtotal * 0.05);
-  const deliveryCharge = orderDetails.orderType === 'delivery' ? 40 : 0;
-  const total = subtotal + gst + deliveryCharge;
+  // Delivery Charge: ₹50 for doorstep delivery, ₹0 for takeaway/dine-in
+  const deliveryCharge = orderDetails.orderType === 'delivery' ? 50 : 0;
+  const total = subtotal + deliveryCharge;
 
-  const handlePlaceOrder = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (cart.length === 0) return;
+  // Function to create full detailed WhatsApp order message URL
+  const createWhatsAppUrl = (
+    invId: string,
+    details: OrderDetails,
+    items: CartItem[],
+    subTot: number,
+    delAmt: number,
+    grandTotal: number,
+    phoneNumber: string = '916398682424'
+  ) => {
+    const itemDetails = items
+      .map(
+        (ci, index) =>
+          `${index + 1}. *${ci.item.name}* (${ci.item.type === 'sweet' ? 'Sweet Shop' : 'Restaurant'})\n   • Qty: ${ci.quantity} × ₹${ci.item.price} = *₹${ci.item.price * ci.quantity}*`
+      )
+      .join('\n');
+
+    let serviceInfo = '';
+    if (details.orderType === 'dine-in') {
+      serviceInfo = `📍 *Dining Spot:* ${details.tableNumber || 'Table 5'}`;
+    } else if (details.orderType === 'delivery') {
+      serviceInfo = `🏠 *Delivery Address:* ${details.address || 'Address not specified'}`;
+    } else {
+      serviceInfo = `🛍️ *Order Type:* Takeaway Counter Pickup`;
+    }
+
+    const messageText = 
+`*✨ QUALITY SWEETS & RESTAURANT - NEW ORDER ✨*
+----------------------------------------
+🧾 *Invoice ID:* #${invId}
+📅 *Date & Time:* ${new Date().toLocaleDateString()} at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+
+👤 *FULL CUSTOMER DETAILS:*
+• *Customer Name:* ${details.customerName || 'Guest Customer'}
+• *Mobile Number:* ${details.customerPhone || 'N/A'}
+• *Order Mode:* ${details.orderType.toUpperCase()}
+${serviceInfo}
+
+🛒 *ORDERED ITEMS:*
+${itemDetails}
+
+----------------------------------------
+💰 *BILL BREAKDOWN:*
+• Items Total: ₹${subTot}
+${delAmt > 0 ? `• Delivery Fee: ₹${delAmt}\n` : ''}
+*🔥 GRAND TOTAL: ₹${grandTotal}*
+----------------------------------------
+Please confirm this order on WhatsApp. Thank you! 🙏`;
+
+    return `https://wa.me/${phoneNumber}?text=${encodeURIComponent(messageText)}`;
+  };
+
+  const sendDirectOrder = (phoneNumber: string) => {
+    if (cart.length === 0) {
+      alert("Kripya cart me items add karein!");
+      return;
+    }
+
+    // Delivery location check
+    if (orderDetails.orderType === 'delivery') {
+      if (userDistance !== null && userDistance > 5.0) {
+        alert("Sorry, we only deliver within 5 km. Your location is " + userDistance.toFixed(2) + " km away.");
+        return;
+      }
+    }
 
     // Generate random invoice ID
     const randomInvoice = 'MM-' + Math.floor(100000 + Math.random() * 900000);
@@ -113,11 +263,29 @@ export default function CartView({
       });
     }
 
+    // Auto open WhatsApp with order details for selected owner phone
+    const waUrl = createWhatsAppUrl(
+      randomInvoice,
+      orderDetails,
+      cart,
+      subtotal,
+      deliveryCharge,
+      total,
+      phoneNumber
+    );
+
+    window.open(waUrl, '_blank');
+
     setReceiptId(randomInvoice);
     setPlacedOrderDetails({ ...orderDetails });
     setPlacedCart([...cart]);
     setCheckoutComplete(true);
     onClearCart();
+  };
+
+  const handlePlaceOrder = (e: React.FormEvent) => {
+    e.preventDefault();
+    sendDirectOrder('918171069007');
   };
 
   if (checkoutComplete && placedOrderDetails) {
@@ -128,9 +296,8 @@ export default function CartView({
       .filter(item => item.item.type === 'restaurant')
       .reduce((sum, item) => sum + item.item.price * item.quantity, 0);
     const pSub = pSweetSub + pRestSub;
-    const pGst = Math.round(pSub * 0.05);
-    const pDel = placedOrderDetails.orderType === 'delivery' ? 40 : 0;
-    const pTotal = pSub + pGst + pDel;
+    const pDel = placedOrderDetails.orderType === 'delivery' ? 50 : 0;
+    const pTotal = pSub + pDel;
 
     return (
       <div className="max-w-xl mx-auto space-y-8 pb-24" id="order-success-container">
@@ -155,7 +322,6 @@ export default function CartView({
             <span className="text-xs font-bold block">॥ श्री गणेशाय नमः ॥</span>
             <span className="text-lg font-black tracking-widest text-orange-700">QUALITY SWEETS</span>
             <span className="text-[10px] block font-semibold uppercase -mt-1">Sweets, Savouries & Multi-Cuisine Restaurant</span>
-            <span className="text-[9px] block">Sector 11, Main Market, New Delhi | Tel: +91-11-2489115</span>
           </div>
 
           {/* Receipt details */}
@@ -230,10 +396,6 @@ export default function CartView({
               <span className="text-slate-500">Subtotal:</span>
               <span>₹{pSub}</span>
             </div>
-            <div className="flex justify-between">
-              <span className="text-slate-500">CGST (2.5%) + SGST (2.5%):</span>
-              <span>₹{pGst}</span>
-            </div>
             {pDel > 0 && (
               <div className="flex justify-between">
                 <span className="text-slate-500">Doorstep Delivery Charge:</span>
@@ -248,31 +410,56 @@ export default function CartView({
 
           {/* Payment QR block & Thank you */}
           <div className="pt-6 text-center space-y-4">
-            <div className="mx-auto w-32 h-32 bg-white border border-slate-200 p-2 rounded-xl flex items-center justify-center shadow-sm" id="qr-block">
-              {/* Dynamic QR styling */}
-              <div className="w-full h-full bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-slate-900 via-slate-850 to-slate-900 flex flex-col justify-center items-center text-[8px] text-white p-2 text-center rounded-lg">
-                <span className="font-bold tracking-widest text-[9px] mb-1">SCAN & PAY</span>
-                <span className="text-orange-400 font-bold block mb-1">UPI: quality@upi</span>
-                <div className="border border-white/20 p-1 rounded bg-white text-slate-900 font-bold text-[7px] w-full uppercase">
-                  ₹{pTotal} Instant Pay
-                </div>
-              </div>
+            <div className="mx-auto bg-white border border-slate-200 p-3 rounded-2xl flex flex-col items-center justify-center shadow-sm space-y-2 max-w-xs" id="qr-block">
+              <span className="text-xs font-bold text-slate-800 uppercase tracking-wide">Paytm / Direct UPI QR Code</span>
+              <img
+                src={`https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(`upi://pay?pa=${OWNER_UPI_ID}&pn=${encodeURIComponent(SHOP_NAME)}&am=${pTotal}&cu=INR&tn=${encodeURIComponent("Quality Sweets Order")}`)}`}
+                alt="Paytm UPI QR Code"
+                className="w-40 h-40 border border-slate-200 rounded-xl p-1 bg-white shadow-inner"
+              />
+              <p className="text-[10px] text-slate-500 font-mono">UPI ID: <strong className="text-slate-800">{OWNER_UPI_ID}</strong></p>
+              
+              <button
+                type="button"
+                onClick={() => openPaytm(pTotal)}
+                className="w-full py-2.5 px-4 bg-[#002e6e] hover:bg-[#001f4d] text-white font-bold text-xs rounded-xl transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer"
+              >
+                <span>Pay ₹{pTotal} via Paytm</span>
+              </button>
             </div>
 
             <div className="text-slate-500 space-y-1">
               <span className="text-xs font-bold block uppercase tracking-wider text-orange-600">★ THANK YOU FOR VISITING ★</span>
               <span className="text-[10px] block">Fresh sweets catalog updated daily on our platform.</span>
-              <span className="text-[9px] text-slate-400 block">Sweets Capacity: 500 Slots | Restaurant Dining Capacity: 200 Slots</span>
+              <span className="text-[9px] text-slate-400 block">Sweets Capacity: 5000 Slots | Restaurant Dining Capacity: 4000 Slots</span>
             </div>
           </div>
         </div>
 
         {/* Bottom controls */}
-        <div className="flex justify-center" id="success-back-controls">
+        <div className="flex flex-col sm:flex-row justify-center items-center gap-3" id="success-back-controls">
+          <a
+            id="send-whatsapp-receipt-owner1-btn"
+            href={createWhatsAppUrl(receiptId, placedOrderDetails, placedCart, pSub, pDel, pTotal, '918171069007')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-[#25D366] hover:bg-[#1ebd59] text-white text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer"
+          >
+            📱 Send Order to Owner 1
+          </a>
+          <a
+            id="send-whatsapp-receipt-owner2-btn"
+            href={createWhatsAppUrl(receiptId, placedOrderDetails, placedCart, pSub, pDel, pTotal, '916398682424')}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full sm:w-auto flex items-center justify-center gap-2 px-5 py-3 bg-[#128C7E] hover:bg-[#0e7065] text-white text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer"
+          >
+            📱 Send Order to Owner 2
+          </a>
           <button
             id="print-receipt-btn"
             onClick={() => window.print()}
-            className="flex items-center gap-1.5 px-4 py-2.5 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all mr-3"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-4 py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 text-xs font-bold rounded-xl transition-all cursor-pointer"
           >
             <Printer className="h-4 w-4" />
             Print Receipt
@@ -280,7 +467,7 @@ export default function CartView({
           <button
             id="back-home-btn"
             onClick={onBackToShopping}
-            className="px-6 py-2.5 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl shadow-md transition-all flex items-center gap-1.5"
+            className="w-full sm:w-auto flex items-center justify-center gap-1.5 px-6 py-3 bg-orange-600 hover:bg-orange-700 text-white text-xs font-bold rounded-xl shadow-md transition-all cursor-pointer"
           >
             <ArrowLeft className="h-4 w-4" />
             Back to Home
@@ -535,20 +722,58 @@ export default function CartView({
                 )}
 
                 {orderDetails.orderType === 'delivery' && (
-                  <div className="space-y-1" id="checkout-delivery-addr">
-                    <label className="text-xs font-bold text-slate-600 flex items-center gap-1">
-                      <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                      Full Address *
-                    </label>
-                    <textarea
-                      id="checkout-address-textarea"
-                      required
-                      rows={2}
-                      placeholder="Flat, building, block, landmark, pincode"
-                      value={orderDetails.address}
-                      onChange={(e) => setOrderDetails({ ...orderDetails, address: e.target.value })}
-                      className="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
-                    />
+                  <div className="space-y-3" id="checkout-delivery-addr">
+                    <div className="space-y-1">
+                      <label className="text-xs font-bold text-slate-600 flex items-center gap-1">
+                        <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                        Full Address *
+                      </label>
+                      <textarea
+                        id="checkout-address-textarea"
+                        required
+                        rows={2}
+                        placeholder="Flat, building, block, landmark, pincode"
+                        value={orderDetails.address}
+                        onChange={(e) => setOrderDetails({ ...orderDetails, address: e.target.value })}
+                        className="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
+                      />
+                    </div>
+
+                    {/* GPS Delivery Area Verification Widget */}
+                    <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-xs space-y-2">
+                      <div className="flex items-center justify-between">
+                        <span className="font-bold text-slate-800 flex items-center gap-1">
+                          <Compass className="h-3.5 w-3.5 text-orange-600" />
+                          5 km Delivery Area Check (Chandpur)
+                        </span>
+                        {userDistance !== null && (
+                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                            userDistance <= 5.0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+                          }`}>
+                            {userDistance.toFixed(2)} km away
+                          </span>
+                        )}
+                      </div>
+
+                      <button
+                        type="button"
+                        id="check-gps-eligibility-btn"
+                        onClick={handleDetectGpsLocation}
+                        disabled={isCheckingLocation}
+                        className="w-full py-2 px-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold rounded-lg transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
+                      >
+                        <MapPin className="h-3.5 w-3.5" />
+                        <span>{isCheckingLocation ? 'Detecting Location...' : '📍 Check GPS Delivery Eligibility'}</span>
+                      </button>
+
+                      {locationStatus && (
+                        <p className={`text-[11px] font-semibold text-center ${
+                          userDistance !== null && userDistance <= 5.0 ? 'text-emerald-700' : 'text-slate-600'
+                        }`}>
+                          {locationStatus}
+                        </p>
+                      )}
+                    </div>
                   </div>
                 )}
               </div>
@@ -578,10 +803,6 @@ export default function CartView({
                   <span>Cart Subtotal:</span>
                   <span className="font-mono">₹{subtotal}</span>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-slate-500">GST (5% Combined):</span>
-                  <span className="font-mono">₹{gst}</span>
-                </div>
                 {orderDetails.orderType === 'delivery' && (
                   <div className="flex justify-between text-emerald-600 font-bold">
                     <span>Doorstep Delivery Charge:</span>
@@ -595,14 +816,111 @@ export default function CartView({
                 </div>
               </div>
 
-              {/* Confirm Submit button */}
-              <button
-                id="submit-order-btn"
-                type="submit"
-                className="w-full py-4 px-6 bg-gradient-to-r from-emerald-600 to-green-600 hover:from-emerald-700 hover:to-green-700 text-white rounded-2xl font-bold shadow-lg shadow-emerald-500/10 hover:shadow-xl hover:scale-[1.01] transition-all flex items-center justify-center gap-2 cursor-pointer"
-              >
-                Place Order & Book Slot
-              </button>
+              {/* Instructions Notice Banner in Hindi & English */}
+              <div className="bg-amber-50 border border-amber-300 rounded-2xl p-3.5 shadow-sm space-y-2 text-left" id="payment-whatsapp-instructions">
+                <div className="flex items-start gap-2">
+                  <span className="text-base leading-none">⚠️</span>
+                  <div className="space-y-1 text-xs">
+                    <p className="font-bold text-amber-900 leading-snug">
+                      🇮🇳 <span className="underline decoration-amber-400">महत्वपूर्ण सूचना (Important Note):</span>
+                    </p>
+                    <p className="text-amber-800 font-medium leading-relaxed">
+                      पहले नीचे दिए गए <strong>WhatsApp</strong> बटन से <strong>दोनों Owner को ऑर्डर की डिटेल भेजना जरूरी है</strong>, उसके बाद ही आप Payment कर सकते हैं।
+                    </p>
+                    <p className="text-amber-700 text-[11px] leading-relaxed pt-0.5 border-t border-amber-200/60">
+                      It is mandatory to send your order details to BOTH Owner 1 and Owner 2 on WhatsApp using the buttons below, and then you can complete your payment.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order WhatsApp Direct Buttons */}
+              <div className="space-y-2 pt-1" id="order-whatsapp-buttons-container">
+                <span className="text-xs font-bold text-slate-800 block text-center">
+                  👇 Step 1: Send Order Details on WhatsApp First:
+                </span>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" id="order-buttons">
+                  <button
+                    type="button"
+                    id="order-btn-owner1"
+                    onClick={() => sendDirectOrder('918171069007')}
+                    className="wa-btn py-3.5 px-4 bg-[#25D366] hover:bg-[#1ebd59] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    📱 Send Order to Owner 1
+                  </button>
+                  <button
+                    type="button"
+                    id="order-btn-owner2"
+                    onClick={() => sendDirectOrder('916398682424')}
+                    className="wa-btn wa-btn-2 py-3.5 px-4 bg-[#128C7E] hover:bg-[#0e7065] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    📱 Send Order to Owner 2
+                  </button>
+                </div>
+              </div>
+
+              {/* Paytm Direct UPI Payment Card */}
+              <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3" id="paytm-checkout-box">
+                <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
+                  <div className="text-left">
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Step 2: Pay via Paytm / UPI</h4>
+                    <p className="text-[10px] text-slate-500 font-mono">Quality Sweets & Food</p>
+                  </div>
+                  <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
+                    0% Extra Charge
+                  </span>
+                </div>
+
+                <div className="flex items-center justify-between px-2">
+                  <span className="text-xs text-slate-600 font-medium">Total Bill:</span>
+                  <span className="text-lg font-black text-emerald-700 font-mono">₹<span id="order-amount">{total}</span></span>
+                </div>
+
+                <button
+                  type="button"
+                  id="paytm-btn"
+                  onClick={() => openPaytm(total)}
+                  className="w-full py-3 px-4 bg-[#002e6e] hover:bg-[#001f4d] text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
+                >
+                  <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
+                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
+                  </svg>
+                  <span>Pay via Paytm / Show QR Code</span>
+                </button>
+
+                {/* QR Code display */}
+                {showPaytmQr && (
+                  <div id="qr-container" className="pt-3 border-t border-slate-200/60 space-y-2.5 bg-white p-3.5 rounded-xl border border-slate-200">
+                    <p className="text-xs font-bold text-slate-800">Scan or Screenshot QR Code to Pay:</p>
+                    <div className="flex justify-center">
+                      <img
+                        id="qr-image"
+                        src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`upi://pay?pa=${OWNER_UPI_ID}&pn=${encodeURIComponent(SHOP_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent("Quality Sweets Order")}`)}`}
+                        alt="UPI QR Code"
+                        className="w-44 h-44 border border-slate-300 rounded-xl p-1.5 bg-white shadow-sm"
+                      />
+                    </div>
+                    <p className="text-[11px] text-slate-600 font-mono">
+                      UPI ID: <strong className="text-slate-900">{OWNER_UPI_ID}</strong> ({SHOP_NAME})
+                    </p>
+
+                    {/* Screenshot Note in Hindi and English */}
+                    <div className="bg-sky-50 border border-sky-200 rounded-xl p-2.5 text-center space-y-1">
+                      <p className="text-xs font-bold text-sky-900">
+                        📸 QR कोड का स्क्रीनशॉट लें और पेमेंट करें
+                      </p>
+                      <p className="text-[11px] font-bold text-sky-800">
+                        Take a screenshot of QR code and pay payment
+                      </p>
+                      <p className="text-[10px] text-sky-600 italic">
+                        (Paytm, PhonePe, Google Pay ya kisi bhi UPI App se scan karke pay karein)
+                      </p>
+                    </div>
+                  </div>
+                )}
+
+                <p className="text-[10px] text-slate-500">🔒 Direct UPI Payment (0% Extra Charge)</p>
+              </div>
             </div>
           </form>
         </div>

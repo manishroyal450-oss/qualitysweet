@@ -2,6 +2,9 @@ import React from 'react';
 import { motion } from 'motion/react';
 import { ViewMode } from '../types';
 import { Store, Utensils, Shield, Sparkles, Plus, AlertCircle, ArrowRight, MapPin, Clock, Phone, Compass, Map } from 'lucide-react';
+import sweets3dBanner from '../assets/images/sweets_3d_banner_1784869496849.jpg';
+import restaurant3dBanner from '../assets/images/restaurant_3d_banner_1784869701727.jpg';
+import quality3dLogo from '../assets/images/quality_3d_clean_logo_1785004219061.jpg';
 
 interface HomeViewProps {
   onViewChange: (view: ViewMode) => void;
@@ -38,15 +41,48 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
               & Restaurant
             </span>
           </motion.h1>
-          <p className="text-lg text-slate-600 max-w-2xl mx-auto">
-            Experience premium curated Indian sweets with our specialized <strong className="text-emerald-700">500-item sweet shop arena</strong>, alongside an exquisite dining menu housed in our <strong className="text-teal-700">200-item fine restaurant menu</strong>.
-          </p>
-          <div className="flex justify-center items-center gap-2 text-sm text-slate-500 font-mono">
-            <span>Pure Vegetarian</span>
-            <span>•</span>
-            <span>Est. 1996</span>
-            <span>•</span>
-            <span>Authentic Ingredients</span>
+
+          {/* 3D Animated Official Brand Logo Emblem */}
+          <div className="pt-2 flex justify-center items-center" id="3d-logo-container">
+            <motion.div
+              initial={{ opacity: 0, y: 20, rotateX: 15 }}
+              animate={{ 
+                opacity: 1, 
+                rotateX: [0, -5, 5, 0],
+                rotateY: [0, 8, -8, 0],
+                y: [0, -8, 0]
+              }}
+              transition={{
+                opacity: { duration: 0.8 },
+                rotateX: { repeat: Infinity, duration: 6, ease: "easeInOut" },
+                rotateY: { repeat: Infinity, duration: 8, ease: "easeInOut" },
+                y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
+              }}
+              whileHover={{ scale: 1.08, rotateY: 15, rotateX: -10 }}
+              className="relative group cursor-pointer perspective-1000"
+            >
+              {/* Golden Ambient Glow Backing */}
+              <div className="absolute -inset-3 bg-gradient-to-r from-amber-400/40 via-emerald-400/30 to-amber-500/40 rounded-3xl blur-xl opacity-75 group-hover:opacity-100 transition duration-500 group-hover:duration-200 animate-pulse"></div>
+
+              {/* 3D Gold Framed Badge Box */}
+              <div className="relative overflow-hidden bg-gradient-to-b from-amber-50/90 via-white to-amber-100/90 p-3 sm:p-4 rounded-3xl border-2 border-amber-300/80 shadow-[0_20px_40px_rgba(217,119,6,0.25)] backdrop-blur-md flex items-center justify-center max-w-xs sm:max-w-sm mx-auto transform-gpu">
+                {/* Metallic Shine Overlay Effect */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+                
+                <img 
+                  src={quality3dLogo} 
+                  alt="Quality Sweets & Confectioners Official 3D Emblem Logo" 
+                  className="w-48 sm:w-64 h-auto object-contain rounded-2xl drop-shadow-[0_10px_20px_rgba(0,0,0,0.15)] group-hover:drop-shadow-[0_15px_30px_rgba(217,119,6,0.35)] transition-all duration-300"
+                  referrerPolicy="no-referrer"
+                />
+              </div>
+
+              {/* 3D Badge Indicator Tag */}
+              <div className="mt-3 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-slate-900/90 backdrop-blur-md text-amber-300 text-[10px] sm:text-xs font-bold uppercase tracking-wider shadow-lg border border-amber-400/40">
+                <Sparkles className="h-3 w-3 text-amber-400 animate-spin" />
+                <span>3D Official Heritage Logo</span>
+              </div>
+            </motion.div>
           </div>
         </div>
       </section>
@@ -56,52 +92,36 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
         {/* Sweet Shop Gateway */}
         <div 
           id="gateway-sweet-card"
-          className="group relative overflow-hidden bg-gradient-to-b from-emerald-50/50 to-white border border-emerald-100 rounded-3xl p-8 shadow-md hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between"
+          className="group relative overflow-hidden bg-gradient-to-b from-emerald-50/50 to-white border border-emerald-100 rounded-3xl p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-emerald-200 transition-all duration-300 flex flex-col justify-between"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-emerald-400/10 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
           
-          <div className="space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="p-4 bg-emerald-500 text-white rounded-2xl shadow-lg shadow-emerald-500/20">
-                <Store className="h-8 w-8" />
+          <div className="space-y-4">
+            {/* 3D Animated Sweets Image Banner */}
+            <div className="relative overflow-hidden rounded-2xl border border-emerald-200/60 shadow-lg group-hover:shadow-xl transition-all duration-300">
+              <img 
+                src={sweets3dBanner} 
+                alt="3D Animated Traditional Sweets" 
+                className="w-full h-56 sm:h-64 object-cover transform group-hover:scale-105 transition-transform duration-500"
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+                <span className="text-xs font-black uppercase tracking-wider bg-emerald-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-emerald-400/30">
+                  3D Sweet Selection
+                </span>
+                <span className="text-xs font-bold bg-amber-500/90 text-white px-2.5 py-1 rounded-full shadow-md">
+                  Fresh Ghee Sweets
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-xs font-semibold text-emerald-800 uppercase tracking-wider block">Capacity Status</span>
-                <span className="text-2xl font-bold text-slate-800 font-mono">{sweetCount} / {sweetMax}</span>
-                <span className="text-xs text-slate-500 block">Sweets Slots Filled</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight font-sans">Mithai Paradise</h2>
-              <p className="text-slate-600">
-                Dive into a spectacular collection of pure ghee laddoos, premium dry-fruit katlis, creamy rabdi rasmalai, sugar-free healthy bites, and authentic Bengali cottage-cheese sweets.
-              </p>
-            </div>
-
-            {/* Capacity Progress Bar */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold text-emerald-700">
-                <span>Visual Space Allocation</span>
-                <span>{sweetPercent}% Space Used</span>
-              </div>
-              <div className="h-3 w-full bg-emerald-100 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-emerald-400 to-green-600 rounded-full transition-all duration-1000"
-                  style={{ width: `${sweetPercent}%` }}
-                ></div>
-              </div>
-              <p className="text-[11px] text-slate-400 italic">
-                Reservations locked for up to 500 catalog items.
-              </p>
             </div>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-6">
             <button
               id="goto-sweet-shop-btn"
               onClick={() => onViewChange('sweet-shop')}
-              className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold shadow-md shadow-emerald-600/10 hover:shadow-lg transition-all flex items-center justify-center gap-2 group/btn"
+              className="w-full py-4 px-6 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold shadow-md shadow-emerald-600/10 hover:shadow-lg transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               Explore Sweet Shop
               <ArrowRight className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" />
@@ -112,52 +132,42 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
         {/* Restaurant Gateway */}
         <div 
           id="gateway-restaurant-card"
-          className="group relative overflow-hidden bg-gradient-to-b from-teal-50/50 to-white border border-teal-100 rounded-3xl p-8 shadow-md hover:shadow-xl hover:border-teal-200 transition-all duration-300 flex flex-col justify-between"
+          className="group relative overflow-hidden bg-gradient-to-b from-teal-50/50 to-white border border-teal-100 rounded-3xl p-6 sm:p-8 shadow-md hover:shadow-xl hover:border-teal-200 transition-all duration-300 flex flex-col justify-between"
         >
           <div className="absolute top-0 right-0 w-32 h-32 bg-teal-400/10 rounded-bl-full -z-10 transition-transform group-hover:scale-110"></div>
           
-          <div className="space-y-6">
-            <div className="flex justify-between items-start">
-              <div className="p-4 bg-teal-600 text-white rounded-2xl shadow-lg shadow-teal-600/20">
-                <Utensils className="h-8 w-8" />
+          <div className="space-y-4">
+            {/* 3D Animated Restaurant Image Banner with Motion */}
+            <motion.div 
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ duration: 0.5 }}
+              className="relative overflow-hidden rounded-2xl border border-teal-200/60 shadow-lg group-hover:shadow-xl transition-all duration-300"
+            >
+              <motion.img 
+                src={restaurant3dBanner} 
+                alt="3D Animated Restaurant Gourmet Dishes" 
+                className="w-full h-56 sm:h-64 object-cover transform group-hover:scale-105 transition-transform duration-500"
+                referrerPolicy="no-referrer"
+                whileHover={{ scale: 1.05 }}
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent pointer-events-none" />
+              <div className="absolute bottom-3 left-4 right-4 flex items-center justify-between text-white">
+                <span className="text-xs font-black uppercase tracking-wider bg-teal-900/80 backdrop-blur-md px-3 py-1 rounded-full border border-teal-400/30">
+                  3D Gourmet Menu
+                </span>
+                <span className="text-xs font-bold bg-rose-500/90 text-white px-2.5 py-1 rounded-full shadow-md">
+                  Fresh Hot Dining
+                </span>
               </div>
-              <div className="text-right">
-                <span className="text-xs font-semibold text-teal-800 uppercase tracking-wider block">Capacity Status</span>
-                <span className="text-2xl font-bold text-slate-800 font-mono">{restaurantCount} / {restaurantMax}</span>
-                <span className="text-xs text-slate-500 block">Menu Slots Filled</span>
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <h2 className="text-3xl font-bold text-slate-900 tracking-tight font-sans">Gourmet Dining</h2>
-              <p className="text-slate-600">
-                Enjoy a majestic journey through crisp tandoori flatbreads, aromatic slow-cooked biryanis, hot sizzling South Indian dosas, savory chats, and our legendary fresh summer mango lassi.
-              </p>
-            </div>
-
-            {/* Capacity Progress Bar */}
-            <div className="space-y-1.5">
-              <div className="flex justify-between text-xs font-semibold text-teal-700">
-                <span>Visual Space Allocation</span>
-                <span>{restaurantPercent}% Space Used</span>
-              </div>
-              <div className="h-3 w-full bg-teal-100 rounded-full overflow-hidden">
-                <div 
-                  className="h-full bg-gradient-to-r from-teal-400 to-emerald-600 rounded-full transition-all duration-1000"
-                  style={{ width: `${restaurantPercent}%` }}
-                ></div>
-              </div>
-              <p className="text-[11px] text-slate-400 italic">
-                Curated lock-in for up to 200 high-end restaurant slots.
-              </p>
-            </div>
+            </motion.div>
           </div>
 
-          <div className="pt-8">
+          <div className="pt-6">
             <button
               id="goto-restaurant-btn"
               onClick={() => onViewChange('restaurant')}
-              className="w-full py-4 px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold shadow-md shadow-teal-600/10 hover:shadow-lg transition-all flex items-center justify-center gap-2 group/btn"
+              className="w-full py-4 px-6 bg-teal-600 hover:bg-teal-700 text-white rounded-2xl font-bold shadow-md shadow-teal-600/10 hover:shadow-lg transition-all flex items-center justify-center gap-2 group/btn cursor-pointer"
             >
               Explore Restaurant Menu
               <ArrowRight className="h-5 w-5 transition-transform group-hover/btn:translate-x-1" />

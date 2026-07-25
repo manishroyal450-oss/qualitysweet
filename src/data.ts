@@ -151,6 +151,99 @@ export const INITIAL_SWEETS: MenuItem[] = [
     type: 'sweet',
     isVeg: true,
     rating: 4.7
+  },
+  // Fast Food in Sweets Section
+  {
+    id: 'sw-ff-1',
+    name: 'Special Veg Cheese Burger',
+    description: 'Crispy veggie patty with fresh lettuce, tomato slice, cheese, and special burger sauce.',
+    price: 80,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'sw-ff-2',
+    name: 'Desi Veg Chowmein / Noodles',
+    description: 'Street-style wok-tossed noodles with crunchy vegetables and spicy garlic sauces.',
+    price: 90,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'sw-ff-3',
+    name: 'Cheese Grilled Sandwich',
+    description: 'Triple-layer toasted bread loaded with melted butter, shredded cheese, and fresh veggies.',
+    price: 100,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1528735602780-2552fd46c7af?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'sw-ff-4',
+    name: 'Crispy Veg Spring Rolls',
+    description: 'Golden thin pastry rolls stuffed with shredded vegetables and noodles, served with chili dip.',
+    price: 110,
+    category: 'Fast Food',
+    image: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.6
+  },
+  // Snacks in Sweets Section
+  {
+    id: 'sw-sn-1',
+    name: 'Special Chole Samosa (2 Pcs)',
+    description: 'Crispy samosas crushed and served with hot tangy spicy chickpeas curry, chutneys & onion.',
+    price: 50,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-sn-2',
+    name: 'Pyaz Khasta Kachori (2 Pcs)',
+    description: 'Flaky deep-fried puffed bread filled with spiced onion mixture, served with aloo sabzi.',
+    price: 45,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'sw-sn-3',
+    name: 'Special Chole Bhature (2 Pcs)',
+    description: 'Fluffy golden bhature served with rich authentic spicy chole, pickle, and onion rings.',
+    price: 120,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-sn-4',
+    name: 'Paneer Stuffed Bread Pakora (2 Pcs)',
+    description: 'Golden gram-flour battered bread stuffed with spicy paneer aloo mash, served with green chutney.',
+    price: 60,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
   }
 ];
 
@@ -571,6 +664,76 @@ export const INITIAL_RESTAURANT: MenuItem[] = [
     type: 'restaurant',
     isVeg: true,
     rating: 4.4
+  },
+
+  // Snacks
+  {
+    id: 'rt-sn-1',
+    name: 'Special Chole Samosa (2 Pcs)',
+    description: 'Crispy samosas crushed and served with hot tangy spicy chickpeas curry, chutneys & onion.',
+    price: 50,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'rt-sn-2',
+    name: 'Pyaz Khasta Kachori (2 Pcs)',
+    description: 'Flaky deep-fried puffed bread filled with spiced onion mixture, served with aloo sabzi.',
+    price: 45,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8
+  },
+  {
+    id: 'rt-sn-3',
+    name: 'Assorted Mix Veg Pakora',
+    description: 'Crispy deep-fried onion, potato, and spinach fritters served with mint chutney (250 GM).',
+    price: 90,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
+  },
+  {
+    id: 'rt-sn-4',
+    name: 'Crispy French Fries',
+    description: 'Golden salted potato fries served piping hot with tomato ketchup.',
+    price: 70,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'rt-sn-5',
+    name: 'Peri Peri Masala Fries',
+    description: 'Crispy french fries tossed with zesty spicy peri-peri seasoning.',
+    price: 90,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1576107232684-1279f3908594?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'rt-sn-6',
+    name: 'Veg Cheese Cutlet (2 Pcs)',
+    description: 'Golden fried potato and vegetable patties stuffed with melting cheese.',
+    price: 80,
+    category: 'Snacks',
+    image: 'https://images.unsplash.com/photo-1626777552726-4a6b54c97e46?w=500&auto=format&fit=crop&q=60',
+    type: 'restaurant',
+    isVeg: true,
+    rating: 4.7
   },
 
   // Noodles (Image: Hakka Noodles)
@@ -1661,16 +1824,19 @@ export const SWEET_CATEGORIES = [
   'Milk Sweets',
   'Bengali Sweets',
   'Dry Fruit Sweets',
-  'Sugar Free'
+  'Sugar Free',
+  'Fast Food',
+  'Snacks'
 ];
 
 export const RESTAURANT_CATEGORIES = [
   'All',
+  'Fast Food',
+  'Snacks',
   'Pizza',
   'Soup',
   'Pasta',
   'Sandwich',
-  'Fast Food',
   'Noodles',
   'Momos',
   'Burger',

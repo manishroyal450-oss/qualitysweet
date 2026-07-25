@@ -80,8 +80,10 @@ export default function AdminView({
     staffHealthLogs: true
   });
 
-  // Add Item Form State
+  // Add Item Form State & Delete Modal State
   const [showAddForm, setShowAddForm] = useState(false);
+  const [formError, setFormError] = useState('');
+  const [deleteTarget, setDeleteTarget] = useState<MenuItem | null>(null);
   const [newItem, setNewItem] = useState({
     name: '',
     description: '',
@@ -119,14 +121,15 @@ export default function AdminView({
 
   const handleAddNewItem = (e: React.FormEvent) => {
     e.preventDefault();
+    setFormError('');
     if (!newItem.name || !newItem.price || !newItem.category) {
-      alert('Please fill out the item name, price, and category.');
+      setFormError('Please fill out the item name, price, and category.');
       return;
     }
 
     const priceNum = parseFloat(newItem.price);
     if (isNaN(priceNum) || priceNum <= 0) {
-      alert('Please enter a valid price.');
+      setFormError('Please enter a valid price.');
       return;
     }
 
@@ -169,8 +172,8 @@ export default function AdminView({
 
   const pendingOrdersCount = orders.filter(o => o.status === 'pending').length;
 
-  const sweetCapacityPct = (sweets.length / 500) * 100;
-  const restCapacityPct = (restaurant.length / 200) * 100;
+  const sweetCapacityPct = (sweets.length / 5000) * 100;
+  const restCapacityPct = (restaurant.length / 4000) * 100;
 
   // Filter products lists
   const currentInvList = invType === 'sweet' ? sweets : restaurant;
@@ -306,7 +309,7 @@ export default function AdminView({
             Unified Operational Standard Dashboard
           </h2>
           <p className="text-xs text-slate-300 leading-relaxed max-w-xl">
-            Our unified standard enforces strict synchronous segregation. We allocate exactly <strong className="text-amber-400">500 persistent bulk slots</strong> for sweets to ensure optimal preparation under separate desi ghee operations, and <strong className="text-orange-400">200 table recipe slots</strong> to verify same-day kitchen ingredient freshness.
+            Our unified standard enforces strict synchronous segregation. We allocate exactly <strong className="text-amber-400">5,000 persistent bulk slots</strong> for sweets to ensure optimal preparation under separate desi ghee operations, and <strong className="text-orange-400">4,000 table recipe slots</strong> to verify same-day kitchen ingredient freshness.
           </p>
 
           {/* Mini sliders / real-time readings in banner for user feedback */}
@@ -470,7 +473,7 @@ export default function AdminView({
           <div className="flex justify-between items-start">
             <div>
               <span className="text-slate-500 text-xs font-bold uppercase tracking-wider block">Sweets Slots</span>
-              <span className="text-2xl font-black text-slate-900">{sweets.length} <span className="text-xs text-slate-400 font-normal">/ 500</span></span>
+              <span className="text-2xl font-black text-slate-900">{sweets.length} <span className="text-xs text-slate-400 font-normal">/ 5,000</span></span>
             </div>
             <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${sweetCapacityPct > 90 ? 'bg-red-50 text-red-600' : 'bg-slate-50 text-slate-600'}`}>
               {sweetCapacityPct.toFixed(0)}% Used
@@ -489,7 +492,7 @@ export default function AdminView({
           <div className="flex justify-between items-start">
             <div>
               <span className="text-slate-500 text-xs font-bold uppercase tracking-wider block">Dining Items</span>
-              <span className="text-2xl font-black text-slate-900">{restaurant.length} <span className="text-xs text-slate-400 font-normal">/ 200</span></span>
+              <span className="text-2xl font-black text-slate-900">{restaurant.length} <span className="text-xs text-slate-400 font-normal">/ 4,000</span></span>
             </div>
             <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${restCapacityPct > 90 ? 'bg-red-50 text-red-600' : 'bg-slate-50 text-slate-600'}`}>
               {restCapacityPct.toFixed(0)}% Used
@@ -704,13 +707,13 @@ export default function AdminView({
                 onClick={() => setInvType('sweet')}
                 className={`px-4 py-2 rounded-lg text-xs font-bold transition uppercase ${invType === 'sweet' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                Sweets ({sweets.length} / 500)
+                Sweets ({sweets.length} / 5,000)
               </button>
               <button
                 onClick={() => setInvType('restaurant')}
                 className={`px-4 py-2 rounded-lg text-xs font-bold transition uppercase ${invType === 'restaurant' ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-900'}`}
               >
-                Restaurant Dining ({restaurant.length} / 200)
+                Restaurant Dining ({restaurant.length} / 4,000)
               </button>
             </div>
 
@@ -746,7 +749,7 @@ export default function AdminView({
                   Add New Custom {invType === 'sweet' ? 'Sweet' : 'Restaurant Dining'} Item
                 </h3>
                 <p className="text-[11px] text-slate-400">
-                  Ensure you don't exceed strict storage limits ({invType === 'sweet' ? '500' : '200'} limit).
+                  Ensure you don't exceed strict storage limits ({invType === 'sweet' ? '5,000' : '4,000'} limit).
                 </p>
               </div>
 
@@ -915,15 +918,12 @@ export default function AdminView({
                         </td>
                         <td className="py-4 px-6 text-right">
                           <button
-                            onClick={() => {
-                              if (confirm(`Are you sure you want to delete ${item.name}? This will free up one slot.`)) {
-                                onRemoveItem(item.id);
-                              }
-                            }}
-                            className="text-red-500 hover:text-red-700 p-2 hover:bg-red-50 rounded-lg transition"
-                            title="Delete Slot"
+                            onClick={() => setDeleteTarget(item)}
+                            className="bg-red-50 hover:bg-red-100 text-red-600 px-3 py-1.5 rounded-xl font-bold text-xs transition border border-red-200 inline-flex items-center gap-1.5 shadow-sm active:scale-95 cursor-pointer"
+                            title="Delete Item"
                           >
-                            <Trash2 className="h-4 w-4" />
+                            <Trash2 className="h-3.5 w-3.5" />
+                            <span>Delete Slot</span>
                           </button>
                         </td>
                       </tr>
@@ -933,6 +933,60 @@ export default function AdminView({
               </table>
             </div>
           </div>
+
+          {/* Delete Product Confirmation Modal Overlay */}
+          {deleteTarget && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/70 backdrop-blur-sm animate-in fade-in duration-200">
+              <div className="bg-white rounded-3xl p-6 max-w-md w-full shadow-2xl border border-slate-100 space-y-4 text-left">
+                <div className="flex items-center gap-3 text-red-600">
+                  <div className="p-3 bg-red-100 rounded-2xl shrink-0">
+                    <Trash2 className="h-6 w-6" />
+                  </div>
+                  <div>
+                    <h3 className="text-base font-black text-slate-900">Delete Product from Menu</h3>
+                    <p className="text-xs text-slate-500 font-medium">इन्वेंटरी से प्रोडक्ट हटाएं</p>
+                  </div>
+                </div>
+
+                <div className="bg-slate-50 p-4 rounded-2xl border border-slate-200/80 flex items-center gap-3">
+                  <img 
+                    src={deleteTarget.image} 
+                    alt={deleteTarget.name}
+                    className="w-12 h-12 object-cover rounded-xl border border-slate-200 shrink-0" 
+                  />
+                  <div>
+                    <h4 className="font-extrabold text-slate-900 text-sm leading-snug">{deleteTarget.name}</h4>
+                    <span className="text-xs font-semibold text-slate-500">
+                      Category: {deleteTarget.category} • ₹{deleteTarget.price}
+                    </span>
+                  </div>
+                </div>
+
+                <p className="text-xs text-slate-700 leading-relaxed font-medium">
+                  क्या आप वाकई <strong>{deleteTarget.name}</strong> को इन्वेंटरी सूची से हमेशा के लिए डिलीट करना चाहते हैं?
+                </p>
+
+                <div className="flex items-center justify-end gap-3 pt-3 border-t border-slate-100">
+                  <button
+                    onClick={() => setDeleteTarget(null)}
+                    className="px-4 py-2.5 text-xs font-bold text-slate-600 bg-slate-100 hover:bg-slate-200 rounded-xl transition cursor-pointer"
+                  >
+                    Cancel (कैंसल)
+                  </button>
+                  <button
+                    onClick={() => {
+                      onRemoveItem(deleteTarget.id);
+                      setDeleteTarget(null);
+                    }}
+                    className="px-5 py-2.5 text-xs font-bold text-white bg-red-600 hover:bg-red-700 rounded-xl shadow-md transition flex items-center gap-1.5 cursor-pointer active:scale-95"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                    Yes, Delete (डिलीट करें)
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
       )}
 
@@ -942,7 +996,7 @@ export default function AdminView({
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
               <Layers className="h-5 w-5 text-amber-600" />
-              Sweets Space Simulator (500 Limit)
+              Sweets Space Simulator (5,000 Limit)
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
               Generate dozens of mock sweet dishes instantly to stress test the UI, check slot capacity warnings, or examine high-load grid layouts.
@@ -955,7 +1009,7 @@ export default function AdminView({
                   <input
                     type="range"
                     min="1"
-                    max="150"
+                    max="500"
                     value={bulkCount}
                     onChange={(e) => setBulkCount(parseInt(e.target.value))}
                     className="flex-grow accent-amber-600"
@@ -967,7 +1021,7 @@ export default function AdminView({
               <div className="flex gap-3">
                 <button
                   onClick={() => onAddBulkItems('sweet', bulkCount)}
-                  disabled={sweets.length >= 500}
+                  disabled={sweets.length >= 5000}
                   className="flex-grow bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition"
                 >
                   Generate Sweets
@@ -985,7 +1039,7 @@ export default function AdminView({
           <div className="bg-white p-6 rounded-2xl border border-slate-100 shadow-sm space-y-4">
             <h3 className="text-sm font-black text-slate-900 uppercase tracking-wide flex items-center gap-2">
               <Layers className="h-5 w-5 text-orange-600" />
-              Dining Space Simulator (200 Limit)
+              Dining Space Simulator (4,000 Limit)
             </h3>
             <p className="text-xs text-slate-500 leading-relaxed">
               Simulate full restaurant seating dishes, evaluate fast kitchen operations, and inspect capacity limits of the dining inventory database.
@@ -998,7 +1052,7 @@ export default function AdminView({
                   <input
                     type="range"
                     min="1"
-                    max="100"
+                    max="500"
                     value={bulkCount}
                     onChange={(e) => setBulkCount(parseInt(e.target.value))}
                     className="flex-grow accent-orange-600"
@@ -1010,7 +1064,7 @@ export default function AdminView({
               <div className="flex gap-3">
                 <button
                   onClick={() => onAddBulkItems('restaurant', bulkCount)}
-                  disabled={restaurant.length >= 200}
+                  disabled={restaurant.length >= 4000}
                   className="flex-grow bg-slate-900 hover:bg-slate-800 disabled:opacity-50 text-white font-bold py-2.5 px-4 rounded-xl text-xs transition"
                 >
                   Generate Restaurant Items
@@ -1031,15 +1085,15 @@ export default function AdminView({
       {activeTab === 'standards' && (
         <div className="space-y-8" id="standards-tab-content">
           {/* Quick Alert Warning based on real capacity */}
-          {(sweets.length >= 450 || restaurant.length >= 180) && (
+          {(sweets.length >= 4500 || restaurant.length >= 3600) && (
             <div className="bg-red-50 border border-red-200 text-red-900 rounded-2xl p-5 flex items-start gap-3.5 animate-pulse text-left">
               <ShieldAlert className="h-6 w-6 text-red-600 shrink-0 mt-0.5" />
               <div>
                 <h4 className="font-extrabold text-sm uppercase tracking-wider">Operational Slot Capacity Warning!</h4>
                 <p className="text-xs text-red-700 mt-1">
                   Current database allocation exceeds optimal unified standards. 
-                  {sweets.length >= 450 && ` Sweets count (${sweets.length}/500) is in critical threshold.`}
-                  {restaurant.length >= 180 && ` Dining seating items (${restaurant.length}/200) is near exhaustion.`}
+                  {sweets.length >= 4500 && ` Sweets count (${sweets.length}/5,000) is in critical threshold.`}
+                  {restaurant.length >= 3600 && ` Dining seating items (${restaurant.length}/4,000) is near exhaustion.`}
                   Please use Simulation Tools to release slots and restore compliant parameters.
                 </p>
               </div>
