@@ -17,7 +17,6 @@ export default function Navbar({ currentView, onViewChange, cartCount, activeUse
     { id: 'home', label: 'Home', icon: Home, colorClass: 'text-emerald-600', bgClass: 'bg-emerald-50 text-emerald-700' },
     { id: 'sweet-shop', label: 'Sweets', icon: Store, colorClass: 'text-green-600', bgClass: 'bg-green-50 text-green-700' },
     { id: 'restaurant', label: 'Dine', icon: Utensils, colorClass: 'text-teal-600', bgClass: 'bg-teal-50 text-teal-700' },
-    { id: 'dashboard', label: 'Spaces', icon: LayoutDashboard, colorClass: 'text-emerald-600', bgClass: 'bg-emerald-50 text-emerald-700' },
     { id: 'profile', label: activeUser ? activeUser.fullName.split(' ')[0] : 'Profile', icon: User, colorClass: 'text-emerald-600', bgClass: 'bg-emerald-50 text-emerald-700' },
   ];
 

@@ -291,17 +291,16 @@ export default function AiAssistantWidget({
                               key={item.id}
                               className="bg-slate-50 hover:bg-white rounded-xl p-2.5 border border-slate-200 flex gap-3 items-center transition-all group shadow-2xs hover:border-emerald-300"
                             >
-                              <img
-                                src={item.image}
-                                alt={item.name}
-                                className="h-16 w-16 object-cover rounded-lg shrink-0 bg-slate-200 border border-slate-100"
-                                onError={(e) => {
-                                  (e.target as HTMLElement).setAttribute(
-                                    'src',
-                                    'https://images.unsplash.com/photo-1587314168485-3236d6710814?w=200'
-                                  );
-                                }}
-                              />
+                              {item.image && (
+                                <img
+                                  src={item.image}
+                                  alt={item.name}
+                                  className="h-16 w-16 object-cover rounded-lg shrink-0 bg-slate-200 border border-slate-100"
+                                  onError={(e) => {
+                                    (e.target as HTMLElement).style.display = 'none';
+                                  }}
+                                />
+                              )}
                               <div className="flex-1 min-w-0">
                                 <div className="flex items-center justify-between gap-1">
                                   <h4 className="text-xs font-bold text-slate-900 truncate">

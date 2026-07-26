@@ -1,5 +1,6 @@
 import React, { useState, useMemo } from 'react';
 import { MenuItem } from '../types';
+import ProductDetailModal from './ProductDetailModal';
 import { 
   Plus, 
   Search, 
@@ -156,6 +157,8 @@ export default function CatalogView({
   const [showAddForm, setShowAddForm] = useState(false);
   const [filterVegOnly, setFilterVegOnly] = useState(false);
   const [filterSugarFreeOnly, setFilterSugarFreeOnly] = useState(false);
+  const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
+  const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
 
   // Form States
   const [newItemName, setNewItemName] = useState('');
@@ -165,6 +168,13 @@ export default function CatalogView({
   const [newItemIsSugarFree, setNewItemIsSugarFree] = useState(false);
   const [newItemImage, setNewItemImage] = useState('');
   const [formError, setFormError] = useState('');
+
+  // Dynamic Categories list
+  const displayCategories = useMemo(() => {
+    const itemCats = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
+    const combined = Array.from(new Set(['All', ...categories.filter(c => c !== 'All'), ...itemCats]));
+    return combined;
+  }, [categories, items]);
 
   // Filtering & Sorting
   const filteredItems = useMemo(() => {
@@ -328,7 +338,7 @@ export default function CatalogView({
 
       {/* Category Pills horizontal bar */}
       <div className="flex items-center gap-1.5 overflow-x-auto pb-2 scrollbar-none" id="category-pills-bar">
-        {categories.map((category) => (
+        {displayCategories.map((category) => (
           <button
             key={category}
             id={`cat-pill-${category.replace(/\s+/g, '-').toLowerCase()}`}
@@ -391,93 +401,135 @@ export default function CatalogView({
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6" id="catalog-products-grid">
-          {filteredItems.map((item) => (
-            <div
-              key={item.id}
-              id={`product-card-${item.id}`}
-              className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-200/80 transition-all flex flex-col justify-between group"
-            >
-              {/* Product Image Panel */}
-              <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100" id={`product-img-box-${item.id}`}>
-                <img
-                  src={item.image}
-                  alt={item.name}
-                  referrerPolicy="no-referrer"
-                  className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.src = isSweet 
-                      ? 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=500&auto=format&fit=crop&q=60'
-                      : 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=500&auto=format&fit=crop&q=60';
-                  }}
-                />
-                
-                {/* Badges Overlay */}
-                <div className="absolute top-3 left-3 flex flex-wrap gap-1.5" id={`product-badges-${item.id}`}>
-                  {item.popular && (
-                    <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-0.5">
-                      <Flame className="h-3 w-3 fill-white" />
-                      Popular
-                    </span>
-                  )}
-                  {item.isSugarFree && (
-                    <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
-                      Sugar Free
-                    </span>
-                  )}
-                </div>
+          {filteredItems.map((item) => {
+            const hasValidImage = Boolean(item.image && item.image.trim() !== '' && !failedImages[item.id]);
 
-                <div className="absolute top-3 right-3" id={`product-rating-${item.id}`}>
-                  <span className="bg-white/95 backdrop-blur-md text-slate-800 text-xs font-extrabold px-2 py-1 rounded-lg shadow-sm flex items-center gap-0.5 border border-slate-100">
-                    <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
-                    {item.rating?.toFixed(1) || '4.5'}
-                  </span>
+            return (
+              <div
+                key={item.id}
+                id={`product-card-${item.id}`}
+                onClick={() => setSelectedProduct(item)}
+                className="bg-white border border-slate-100 rounded-3xl overflow-hidden shadow-sm hover:shadow-md hover:border-slate-200/80 transition-all flex flex-col justify-between group cursor-pointer"
+              >
+                {/* Product Image Panel - Rendered ONLY if a valid Image URL is present */}
+                {hasValidImage && (
+                  <div className="relative aspect-[4/3] w-full overflow-hidden bg-slate-100" id={`product-img-box-${item.id}`}>
+                    <img
+                      src={item.image}
+                      alt={item.name}
+                      referrerPolicy="no-referrer"
+                      className="object-cover w-full h-full transition-transform duration-500 group-hover:scale-105"
+                      onError={() => {
+                        setFailedImages(prev => ({ ...prev, [item.id]: true }));
+                      }}
+                    />
+                    
+                    {/* Badges Overlay */}
+                    <div className="absolute top-3 left-3 flex flex-wrap gap-1.5" id={`product-badges-${item.id}`}>
+                      {item.popular && (
+                        <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm flex items-center gap-0.5">
+                          <Flame className="h-3 w-3 fill-white" />
+                          Popular
+                        </span>
+                      )}
+                      {item.isSugarFree && (
+                        <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-1 rounded-full shadow-sm">
+                          Sugar Free
+                        </span>
+                      )}
+                    </div>
+
+                    <div className="absolute top-3 right-3" id={`product-rating-${item.id}`}>
+                      <span className="bg-white/95 backdrop-blur-md text-slate-800 text-xs font-extrabold px-2 py-1 rounded-lg shadow-sm flex items-center gap-0.5 border border-slate-100">
+                        <Star className="h-3.5 w-3.5 text-amber-500 fill-amber-500" />
+                        {item.rating?.toFixed(1) || '4.5'}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* Product Info Block */}
+                <div className="p-5 flex-1 flex flex-col justify-between space-y-4" id={`product-info-box-${item.id}`}>
+                  <div className="space-y-1.5">
+                    <div className="flex justify-between items-start gap-2 flex-wrap">
+                      <div className="flex items-center gap-1.5 flex-wrap">
+                        <span className={`text-[10px] font-extrabold uppercase tracking-widest ${theme.accentText}`}>
+                          {item.category}
+                        </span>
+                        <span className="inline-flex items-center gap-1 border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 rounded text-[10px] text-emerald-700 font-bold">
+                          <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
+                          Veg
+                        </span>
+                        {!hasValidImage && item.popular && (
+                          <span className="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs flex items-center gap-0.5">
+                            <Flame className="h-2.5 w-2.5 fill-white" />
+                            Popular
+                          </span>
+                        )}
+                        {!hasValidImage && item.isSugarFree && (
+                          <span className="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full shadow-xs">
+                            Sugar Free
+                          </span>
+                        )}
+                      </div>
+
+                      {!hasValidImage && (
+                        <span className="bg-slate-50 text-slate-800 text-[11px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-0.5 border border-slate-100 shrink-0">
+                          <Star className="h-3 w-3 text-amber-500 fill-amber-500" />
+                          {item.rating?.toFixed(1) || '4.5'}
+                        </span>
+                      )}
+                    </div>
+
+                    <h3 className="font-bold text-slate-950 group-hover:text-slate-800 transition-colors leading-snug">
+                      {item.name}
+                    </h3>
+                    <p className="text-xs text-slate-500 leading-relaxed">
+                      {item.description}
+                    </p>
+                  </div>
+
+                  {/* Pricing & Add Trigger */}
+                  <div className="flex items-center justify-between pt-3 border-t border-slate-100" id={`product-actions-${item.id}`}>
+                    <div className="flex flex-col">
+                      <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Price</span>
+                      <span className="text-lg font-black text-slate-900">₹{item.price}</span>
+                    </div>
+
+                    <div className="flex items-center gap-1.5">
+                      <button
+                        id={`add-to-cart-${item.id}`}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onAddToCart(item);
+                        }}
+                        className={`px-4 py-2 text-xs font-bold text-white rounded-xl transition-all shadow-sm flex items-center gap-1 hover:scale-105 active:scale-95 cursor-pointer ${theme.primaryBg}`}
+                      >
+                        <Plus className="h-3.5 w-3.5" />
+                        ADD
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
-
-              {/* Product Info Block */}
-              <div className="p-5 flex-1 flex flex-col justify-between space-y-4" id={`product-info-box-${item.id}`}>
-                <div className="space-y-1.5">
-                  <div className="flex justify-between items-start gap-2">
-                    <span className={`text-[10px] font-extrabold uppercase tracking-widest ${theme.accentText}`}>
-                      {item.category}
-                    </span>
-                    <span className="inline-flex items-center gap-1 border border-emerald-200 bg-emerald-50 px-1.5 py-0.5 rounded text-[10px] text-emerald-700 font-bold">
-                      <span className="h-1.5 w-1.5 rounded-full bg-emerald-500"></span>
-                      Veg
-                    </span>
-                  </div>
-                  <h3 className="font-bold text-slate-950 group-hover:text-slate-800 transition-colors leading-snug line-clamp-1">
-                    {item.name}
-                  </h3>
-                  <p className="text-xs text-slate-500 line-clamp-2 leading-relaxed min-h-[2.5rem]">
-                    {item.description}
-                  </p>
-                </div>
-
-                {/* Pricing & Add Trigger */}
-                <div className="flex items-center justify-between pt-2 border-t border-slate-50" id={`product-actions-${item.id}`}>
-                  <div className="flex flex-col">
-                    <span className="text-slate-400 text-[10px] uppercase font-bold tracking-wider">Price</span>
-                    <span className="text-lg font-black text-slate-900">₹{item.price}</span>
-                  </div>
-
-                  <div className="flex items-center gap-1.5">
-                    <button
-                      id={`add-to-cart-${item.id}`}
-                      onClick={() => onAddToCart(item)}
-                      className={`px-4 py-2.5 text-xs font-bold text-white rounded-xl transition-all shadow-sm flex items-center gap-1 ${theme.primaryBg}`}
-                    >
-                      <Plus className="h-3.5 w-3.5" />
-                      Add to Cart
-                    </button>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       )}
+
+      {/* Product Detail Modal */}
+      <ProductDetailModal
+        product={selectedProduct}
+        allItems={items}
+        onClose={() => setSelectedProduct(null)}
+        onAddToCart={(item, qty) => {
+          for (let i = 0; i < (qty || 1); i++) {
+            onAddToCart(item);
+          }
+        }}
+        onSelectProduct={(item) => setSelectedProduct(item)}
+        type={type}
+      />
     </div>
   );
 }

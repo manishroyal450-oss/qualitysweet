@@ -547,18 +547,18 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
                 >
                   {/* Photo & Metadata */}
                   <div className="flex items-center gap-3.5 flex-1 min-w-0" id={`cart-item-meta-${item.item.id}`}>
-                    <img
-                      src={item.item.image}
-                      alt={item.item.name}
-                      referrerPolicy="no-referrer"
-                      className="h-14 w-14 object-cover rounded-xl border border-slate-100 bg-slate-50"
-                      onError={(e) => {
-                        const target = e.target as HTMLImageElement;
-                        target.src = item.item.type === 'sweet' 
-                          ? 'https://images.unsplash.com/photo-1589301760014-d929f3979dbc?w=200&auto=format&fit=crop&q=60'
-                          : 'https://images.unsplash.com/photo-1631452180519-c014fe946bc7?w=200&auto=format&fit=crop&q=60';
-                      }}
-                    />
+                    {item.item.image && (
+                      <img
+                        src={item.item.image}
+                        alt={item.item.name}
+                        referrerPolicy="no-referrer"
+                        className="h-14 w-14 object-cover rounded-xl border border-slate-100 bg-slate-50 shrink-0"
+                        onError={(e) => {
+                          const target = e.target as HTMLImageElement;
+                          target.style.display = 'none';
+                        }}
+                      />
+                    )}
                     <div className="min-w-0 space-y-0.5">
                       <div className="flex items-center gap-1.5">
                         <span className={`text-[9px] font-extrabold uppercase px-1.5 py-0.5 rounded ${

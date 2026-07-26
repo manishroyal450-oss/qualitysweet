@@ -267,7 +267,7 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
                 <div className="space-y-1">
                   <span className="text-xs font-bold text-slate-400 uppercase tracking-wider block">Hours of Operation</span>
                   <div className="space-y-1 mt-1 text-sm font-extrabold text-white">
-                    <p>Mon - Sun: 9:00 AM - 10:30 PM</p>
+                    <p>Mon - Sun: 9:40 AM - 10:30 PM</p>
                   </div>
                   <p className="text-[10px] text-slate-400 mt-1 leading-relaxed">
                     Fresh batches of Desi Ghee Jalebis, Samosas, and Sweets are prepared daily starting at 8:30 AM.

@@ -6,7 +6,11 @@ import {
   SWEET_CATEGORIES, 
   RESTAURANT_CATEGORIES 
 } from './data';
-import { fetchCatalogFromSheet } from './services/sheetCatalog';
+import { 
+  fetchCatalogFromSheet, 
+  fetchSweetsFromSheet, 
+  fetchRestaurantFromSheet 
+} from './services/sheetCatalog';
 import Navbar from './components/Navbar';
 import HomeView from './components/HomeView';
 import CatalogView from './components/CatalogView';
@@ -132,36 +136,36 @@ export default function App() {
     return initial.filter(item => !deleted.has(item.id));
   });
 
-  // Auto-sync Google Sheet Catalog
+  // Auto-sync Google Sheet Catalog (Sweets & Restaurant isolated)
   useEffect(() => {
     async function loadSheetData() {
-      const sheetItems = await fetchCatalogFromSheet();
-      if (sheetItems && sheetItems.length > 0) {
-        const deleted = getDeletedIds();
+      const [sweetSheetItems, restSheetItems] = await Promise.all([
+        fetchSweetsFromSheet(),
+        fetchRestaurantFromSheet()
+      ]);
 
-        const sweetItems = sheetItems
-          .filter(i => i.type === 'sweet' || i.category.toLowerCase().includes('fast food') || i.category.toLowerCase().includes('snack'))
-          .filter(i => !deleted.has(i.id));
+      const deleted = getDeletedIds();
 
-        const restItems = sheetItems
-          .filter(i => i.type === 'restaurant')
-          .filter(i => !deleted.has(i.id));
-
+      if (sweetSheetItems && sweetSheetItems.length > 0) {
+        const sweetItems = sweetSheetItems.filter(i => !deleted.has(i.id));
         if (sweetItems.length > 0) {
-          setSweets(prev => {
-            const filteredPrev = prev.filter(p => !deleted.has(p.id));
-            const existingNames = new Set(filteredPrev.map(p => p.name.toLowerCase()));
-            const newToAdd = sweetItems.filter(s => !existingNames.has(s.name.toLowerCase()));
-            return [...filteredPrev, ...newToAdd];
+          setSweets(() => {
+            const custom = getCustomSweets().filter(i => !deleted.has(i.id));
+            const existingNames = new Set(custom.map(p => p.name.toLowerCase()));
+            const newFromSheet = sweetItems.filter(s => !existingNames.has(s.name.toLowerCase()));
+            return [...custom, ...newFromSheet];
           });
         }
+      }
 
+      if (restSheetItems && restSheetItems.length > 0) {
+        const restItems = restSheetItems.filter(i => !deleted.has(i.id));
         if (restItems.length > 0) {
-          setRestaurant(prev => {
-            const filteredPrev = prev.filter(p => !deleted.has(p.id));
-            const existingNames = new Set(filteredPrev.map(p => p.name.toLowerCase()));
-            const newToAdd = restItems.filter(r => !existingNames.has(r.name.toLowerCase()));
-            return [...filteredPrev, ...newToAdd];
+          setRestaurant(() => {
+            const custom = getCustomRestaurant().filter(i => !deleted.has(i.id));
+            const existingNames = new Set(custom.map(p => p.name.toLowerCase()));
+            const newFromSheet = restItems.filter(r => !existingNames.has(r.name.toLowerCase()));
+            return [...custom, ...newFromSheet];
           });
         }
       }

@@ -101,6 +101,7 @@ export default function ProfileView({ onViewChange, orders, activeUser, onActive
     usersList.push(newUser);
     localStorage.setItem('registeredUsers', JSON.stringify(usersList));
     localStorage.setItem('activeUser', JSON.stringify(newUser));
+    window.dispatchEvent(new Event('registeredUsersUpdated'));
     onActiveUserChange(newUser);
     setSuccess('Registration successful! Welcome to Quality Sweets & Restaurant.');
     
@@ -191,6 +192,7 @@ export default function ProfileView({ onViewChange, orders, activeUser, onActive
 
     localStorage.setItem('registeredUsers', JSON.stringify(updatedList));
     localStorage.setItem('activeUser', JSON.stringify(updatedUser));
+    window.dispatchEvent(new Event('registeredUsersUpdated'));
     onActiveUserChange(updatedUser);
     setIsEditing(false);
     setSuccess('Profile updated successfully!');
