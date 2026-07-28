@@ -169,12 +169,24 @@ export default function CatalogView({
   const [newItemImage, setNewItemImage] = useState('');
   const [formError, setFormError] = useState('');
 
-  // Dynamic Categories list
+  // Dynamic Categories list - only include categories that actually have items
   const displayCategories = useMemo(() => {
-    const itemCats = Array.from(new Set(items.map(i => i.category).filter(Boolean)));
-    const combined = Array.from(new Set(['All', ...categories.filter(c => c !== 'All'), ...itemCats]));
-    return combined;
+    const activeCats = new Set(items.map(i => i.category).filter(Boolean));
+    const validCategories = categories.filter(c => c === 'All' || activeCats.has(c));
+    activeCats.forEach(cat => {
+      if (!validCategories.includes(cat)) {
+        validCategories.push(cat);
+      }
+    });
+    return validCategories;
   }, [categories, items]);
+
+  // Reset selected category if current selected category becomes empty
+  React.useEffect(() => {
+    if (selectedCategory !== 'All' && !displayCategories.includes(selectedCategory)) {
+      setSelectedCategory('All');
+    }
+  }, [displayCategories, selectedCategory]);
 
   // Filtering & Sorting
   const filteredItems = useMemo(() => {
