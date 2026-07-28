@@ -152,6 +152,88 @@ export const INITIAL_SWEETS: MenuItem[] = [
     isVeg: true,
     rating: 4.7
   },
+  {
+    id: 'sw-conf-1',
+    name: 'Assorted Premium Chocolates Box',
+    description: 'Handcrafted rich cocoa truffles, dark hazelnut pralines, and milk chocolate bites in a luxury gift box.',
+    price: 320,
+    category: 'Confectionery',
+    image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'sw-conf-2',
+    name: 'Handcrafted Fruit Jellies & Candies',
+    description: 'Colorful soft fruit jellies made with natural fruit extracts and lightly dusted with fine sugar crystals.',
+    price: 140,
+    category: 'Confectionery',
+    image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.6
+  },
+  {
+    id: 'sw-conf-3',
+    name: 'Gourmet Dark Chocolate Truffles',
+    description: '70% dark Belgian cocoa ganache rolled in pure cocoa powder and crushed almonds.',
+    price: 280,
+    category: 'Confectionery',
+    image: 'https://images.unsplash.com/photo-1541781774459-bb2af2f05b55?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-conf-4',
+    name: 'Artisan Butter Caramel Toffees',
+    description: 'Slow-cooked golden butter caramel wrapped individually with sea salt notes.',
+    price: 180,
+    category: 'Confectionery',
+    image: 'https://images.unsplash.com/photo-1582058091505-f87a2e55a40f?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  },
+  // Gift Hampers
+  {
+    id: 'sw-gh-1',
+    name: 'Royal Festive Sweet & Dry Fruit Hamper',
+    description: 'An elegant brass-finish gift box packed with Kaju Katli, Roasted Pistachios, Almond Bites, and Assorted Premium Truffles.',
+    price: 850,
+    category: 'Gift Hampers',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.9,
+    popular: true
+  },
+  {
+    id: 'sw-gh-2',
+    name: 'Luxury Celebration Treasure Box',
+    description: 'A handcrafted wooden tray featuring Desi Ghee Laddoos, Dry Fruit Barfi, Belgian Chocolates, and scented festive diyas.',
+    price: 1250,
+    category: 'Gift Hampers',
+    image: 'https://images.unsplash.com/photo-1513201099705-a9746e1e201f?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.8,
+    popular: true
+  },
+  {
+    id: 'sw-gh-3',
+    name: 'Classic Corporate Sweet Hamper',
+    description: 'Beautifully wrapped gift box containing Premium Milk Sweets, Roasted Cashews, and Artisanal Toffees.',
+    price: 650,
+    category: 'Gift Hampers',
+    image: 'https://images.unsplash.com/photo-1512909006721-3d6018887383?auto=format&fit=crop&q=80&w=600',
+    type: 'sweet',
+    isVeg: true,
+    rating: 4.7
+  },
   // Fast Food in Sweets Section
   {
     id: 'sw-ff-1',
@@ -1825,6 +1907,8 @@ export const SWEET_CATEGORIES = [
   'Bengali Sweets',
   'Dry Fruit Sweets',
   'Sugar Free',
+  'Confectionery',
+  'Gift Hampers',
   'Fast Food',
   'Snacks'
 ];

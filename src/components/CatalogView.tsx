@@ -110,6 +110,14 @@ const CATEGORY_BANNERS: Record<string, { title: string; image: string }> = {
   'Sugar Free': {
     title: 'SUGAR FREE BITES',
     image: 'https://images.unsplash.com/photo-1505576399279-565b52d4ac71?w=800&auto=format&fit=crop&q=80'
+  },
+  'Confectionery': {
+    title: 'CONFECTIONERY',
+    image: 'https://images.unsplash.com/photo-1549007994-cb92caebd54b?w=800&auto=format&fit=crop&q=80'
+  },
+  'Gift Hampers': {
+    title: 'GIFT HAMPERS',
+    image: 'https://images.unsplash.com/photo-1549465220-1a8b9238cd48?w=800&auto=format&fit=crop&q=80'
   }
 };
 
@@ -117,6 +125,7 @@ interface CatalogViewProps {
   type: 'sweet' | 'restaurant';
   items: MenuItem[];
   categories: string[];
+  initialCategory?: string;
   onAddItem: (item: MenuItem) => void;
   onRemoveItem: (id: string) => void;
   onAddToCart: (item: MenuItem) => void;
@@ -129,6 +138,7 @@ export default function CatalogView({
   type,
   items,
   categories,
+  initialCategory,
   onAddItem,
   onRemoveItem,
   onAddToCart,
@@ -152,13 +162,19 @@ export default function CatalogView({
 
   // States
   const [search, setSearch] = useState('');
-  const [selectedCategory, setSelectedCategory] = useState('All');
+  const [selectedCategory, setSelectedCategory] = useState(initialCategory || 'All');
   const [sortBy, setSortBy] = useState<SortOption>('popular');
   const [showAddForm, setShowAddForm] = useState(false);
   const [filterVegOnly, setFilterVegOnly] = useState(false);
   const [filterSugarFreeOnly, setFilterSugarFreeOnly] = useState(false);
   const [failedImages, setFailedImages] = useState<Record<string, boolean>>({});
   const [selectedProduct, setSelectedProduct] = useState<MenuItem | null>(null);
+
+  React.useEffect(() => {
+    if (initialCategory) {
+      setSelectedCategory(initialCategory);
+    }
+  }, [initialCategory]);
 
   // Form States
   const [newItemName, setNewItemName] = useState('');
@@ -273,12 +289,20 @@ export default function CatalogView({
         <div className="space-y-1 text-left">
           <span className="text-xs font-semibold text-slate-500 uppercase tracking-widest font-mono">Arena Showcase</span>
           <h1 className={`text-3xl font-extrabold bg-gradient-to-r ${theme.primaryHeading} bg-clip-text text-transparent font-sans`}>
-            {isSweet ? 'Traditional Sweet Shop' : 'Gourmet Fine Dining'}
+            {initialCategory === 'Gift Hampers'
+              ? 'Festive Gift Hampers'
+              : initialCategory === 'Confectionery' 
+                ? 'Confectionery Showcase' 
+                : isSweet ? 'Traditional Sweet Shop' : 'Gourmet Fine Dining'}
           </h1>
           <p className="text-sm text-slate-500">
-            {isSweet 
-              ? 'Premium Indian sweet creations, catering to authentic traditional festivals and premium gifts.' 
-              : 'Gourmet plates curated with fresh organic local ingredients by our master chefs.'}
+            {initialCategory === 'Gift Hampers'
+              ? 'Exquisite luxury gift hampers, festive sweet boxes, dry fruit treasure trays, and celebration packs.'
+              : initialCategory === 'Confectionery'
+                ? 'Delicious chocolates, candies, fruit jellies, pralines, and handcrafted confectionery delights.'
+                : isSweet 
+                  ? 'Premium Indian sweet creations, catering to authentic traditional festivals and premium gifts.' 
+                  : 'Gourmet plates curated with fresh organic local ingredients by our master chefs.'}
           </p>
         </div>
       </div>
@@ -378,7 +402,7 @@ export default function CatalogView({
           
           <div className="relative z-10 space-y-1.5 sm:space-y-2">
             <span className="inline-flex items-center gap-1 bg-amber-500/90 text-white font-extrabold text-[10px] uppercase tracking-widest px-2.5 py-1 rounded-full shadow-sm backdrop-blur-sm">
-              <span className="text-xs">🍴</span> {isSweet ? 'Quality Sweets' : 'Quality Restaurant'}
+              <span className="text-xs">{selectedCategory === 'Gift Hampers' ? '🎁' : selectedCategory === 'Confectionery' ? '🍫' : '🍴'}</span> {selectedCategory === 'Gift Hampers' ? 'Exclusive Gift Hampers' : selectedCategory === 'Confectionery' ? 'Quality Confectionery' : isSweet ? 'Quality Sweets' : 'Quality Restaurant'}
             </span>
             <h2 className="text-xl sm:text-3xl font-black text-white tracking-wide uppercase font-sans drop-shadow-sm">
               {CATEGORY_BANNERS[selectedCategory].title}

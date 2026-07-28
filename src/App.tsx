@@ -363,8 +363,34 @@ export default function App() {
         {view === 'sweet-shop' && (
           <CatalogView 
             type="sweet"
-            items={sweets}
-            categories={SWEET_CATEGORIES}
+            items={sweets.filter(i => i.category !== 'Confectionery' && i.category !== 'Gift Hampers')}
+            categories={SWEET_CATEGORIES.filter(c => c !== 'Confectionery' && c !== 'Gift Hampers')}
+            onAddItem={handleAddItem}
+            onRemoveItem={handleRemoveItem}
+            onAddToCart={handleAddToCart}
+            onAddBulkItems={handleAddBulkItems}
+          />
+        )}
+
+        {view === 'confectionery' && (
+          <CatalogView 
+            type="sweet"
+            items={[...sweets, ...restaurant].filter(i => i.category === 'Confectionery')}
+            categories={['Confectionery']}
+            initialCategory="Confectionery"
+            onAddItem={handleAddItem}
+            onRemoveItem={handleRemoveItem}
+            onAddToCart={handleAddToCart}
+            onAddBulkItems={handleAddBulkItems}
+          />
+        )}
+
+        {view === 'gift-hampers' && (
+          <CatalogView 
+            type="sweet"
+            items={[...sweets, ...restaurant].filter(i => i.category === 'Gift Hampers')}
+            categories={['Gift Hampers']}
+            initialCategory="Gift Hampers"
             onAddItem={handleAddItem}
             onRemoveItem={handleRemoveItem}
             onAddToCart={handleAddToCart}

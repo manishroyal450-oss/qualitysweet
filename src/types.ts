@@ -17,7 +17,7 @@ export interface CartItem {
   quantity: number;
 }
 
-export type ViewMode = 'home' | 'sweet-shop' | 'restaurant' | 'dashboard' | 'cart' | 'admin' | 'profile';
+export type ViewMode = 'home' | 'sweet-shop' | 'restaurant' | 'confectionery' | 'gift-hampers' | 'dashboard' | 'cart' | 'admin' | 'profile';
 
 export interface Order {
   id: string;

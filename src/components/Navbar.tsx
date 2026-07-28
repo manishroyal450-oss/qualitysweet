@@ -1,6 +1,6 @@
 import React from 'react';
 import { ViewMode, UserProfile } from '../types';
-import { Store, Utensils, LayoutDashboard, ShoppingBag, Home, ShieldCheck, User, Sparkles, ArrowLeft } from 'lucide-react';
+import { Store, Utensils, LayoutDashboard, ShoppingBag, Home, ShieldCheck, User, Sparkles, ArrowLeft, Cake, Gift } from 'lucide-react';
 import quality3dLogo from '../assets/images/quality_3d_clean_logo_1785004219061.jpg';
 
 interface NavbarProps {
@@ -17,6 +17,8 @@ export default function Navbar({ currentView, onViewChange, cartCount, activeUse
     { id: 'home', label: 'Home', icon: Home, colorClass: 'text-emerald-600', bgClass: 'bg-emerald-50 text-emerald-700' },
     { id: 'sweet-shop', label: 'Sweets', icon: Store, colorClass: 'text-green-600', bgClass: 'bg-green-50 text-green-700' },
     { id: 'restaurant', label: 'Dine', icon: Utensils, colorClass: 'text-teal-600', bgClass: 'bg-teal-50 text-teal-700' },
+    { id: 'confectionery', label: 'Confectionery', icon: Cake, colorClass: 'text-amber-600', bgClass: 'bg-amber-50 text-amber-700' },
+    { id: 'gift-hampers', label: 'Gift Hampers', icon: Gift, colorClass: 'text-purple-600', bgClass: 'bg-purple-50 text-purple-700' },
     { id: 'profile', label: activeUser ? activeUser.fullName.split(' ')[0] : 'Profile', icon: User, colorClass: 'text-emerald-600', bgClass: 'bg-emerald-50 text-emerald-700' },
   ];
 
@@ -136,18 +138,18 @@ export default function Navbar({ currentView, onViewChange, cartCount, activeUse
 
       {/* Unified Bottom Navigation Bar (Works beautifully on Desktop and Mobile) */}
       <div 
-        className="fixed bottom-0 md:bottom-6 left-0 md:left-1/2 md:-translate-x-1/2 right-0 md:right-auto bg-white/95 md:bg-white/90 backdrop-blur-md border-t md:border border-slate-200 md:border-emerald-100/50 px-1.5 sm:px-4 md:px-8 py-2 md:py-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] md:shadow-xl md:rounded-2xl flex justify-around md:justify-center md:gap-2 items-center w-full md:w-auto" 
+        className="fixed bottom-0 md:bottom-6 left-0 md:left-1/2 md:-translate-x-1/2 right-0 md:right-auto bg-white/95 md:bg-white/90 backdrop-blur-md border-t md:border border-slate-200 md:border-emerald-100/50 px-1 sm:px-4 md:px-8 py-1.5 md:py-3 z-50 shadow-[0_-4px_20px_rgba(0,0,0,0.06)] md:shadow-xl md:rounded-2xl flex justify-between sm:justify-around md:justify-center md:gap-2 items-center w-full md:w-auto overflow-x-auto scrollbar-none" 
         id="bottom-nav-bar"
       >
         {currentView !== 'home' && (
           <button
             id="bottom-nav-back-btn"
             onClick={onBack || (() => onViewChange('home'))}
-            className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 px-1 sm:px-2 md:px-4 py-1 md:py-2 rounded-xl text-[10px] md:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all min-w-[44px] sm:min-w-[54px] cursor-pointer"
+            className="flex flex-col md:flex-row items-center justify-center gap-0.5 md:gap-2 px-1 sm:px-2 md:px-4 py-1 md:py-2 rounded-xl text-[10px] md:text-sm font-bold text-slate-700 bg-slate-100 hover:bg-slate-200 border border-slate-200 transition-all min-w-[38px] sm:min-w-[50px] shrink-0 cursor-pointer"
             aria-label="Navigate Back"
           >
-            <ArrowLeft className="h-5 w-5 md:h-4 md:w-4 text-emerald-700" />
-            <span className="text-[9px] md:text-xs">Back</span>
+            <ArrowLeft className="h-4 w-4 text-emerald-700" />
+            <span className="text-[8px] sm:text-[9px] md:text-xs">Back</span>
           </button>
         )}
 
@@ -159,14 +161,14 @@ export default function Navbar({ currentView, onViewChange, cartCount, activeUse
               key={item.id}
               id={`nav-btn-${item.id}`}
               onClick={() => onViewChange(item.id as ViewMode)}
-              className={`flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 px-1 sm:px-2 md:px-5 py-1 md:py-2 rounded-xl text-[10px] md:text-sm font-semibold transition-all duration-200 min-w-[50px] sm:min-w-[60px] md:min-w-[110px] cursor-pointer ${
+              className={`flex flex-col md:flex-row items-center justify-center gap-0.5 sm:gap-1 md:gap-2 px-1 sm:px-2 md:px-5 py-1 md:py-2 rounded-xl text-[10px] md:text-sm font-semibold transition-all duration-200 min-w-[44px] sm:min-w-[58px] md:min-w-[110px] shrink-0 cursor-pointer ${
                 isActive
                   ? item.bgClass + ' scale-105 shadow-sm font-bold'
                   : 'text-slate-500 hover:bg-slate-50 hover:text-slate-900'
               }`}
             >
-              <Icon className="h-5 w-5 md:h-4 md:w-4" />
-              <span className="text-[9px] md:text-xs tracking-wide">{item.label}</span>
+              <Icon className="h-4 w-4 md:h-4 md:w-4" />
+              <span className="text-[8px] sm:text-[9px] md:text-xs tracking-wide">{item.label}</span>
             </button>
           );
         })}
