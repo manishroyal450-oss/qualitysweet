@@ -23,6 +23,63 @@ import AiAssistantWidget from './components/AiAssistantWidget';
 import OfflineOverlay from './components/OfflineOverlay';
 import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X, Sparkles, Bot } from 'lucide-react';
 
+const getViewFromPathname = (pathname: string): ViewMode => {
+  const cleanPath = pathname.replace(/\/+$/, '') || '/';
+  switch (cleanPath.toLowerCase()) {
+    case '/privacy':
+      return 'privacy';
+    case '/profile':
+      return 'profile';
+    case '/sweet-shop':
+    case '/sweets':
+      return 'sweet-shop';
+    case '/restaurant':
+    case '/dine':
+      return 'restaurant';
+    case '/confectionery':
+      return 'confectionery';
+    case '/gift-hampers':
+    case '/hampers':
+      return 'gift-hampers';
+    case '/cart':
+      return 'cart';
+    case '/dashboard':
+      return 'dashboard';
+    case '/admin':
+      return 'admin';
+    case '/':
+    case '/home':
+    default:
+      return 'home';
+  }
+};
+
+const getPathnameFromView = (view: ViewMode): string => {
+  switch (view) {
+    case 'privacy':
+      return '/privacy';
+    case 'profile':
+      return '/profile';
+    case 'sweet-shop':
+      return '/sweet-shop';
+    case 'restaurant':
+      return '/restaurant';
+    case 'confectionery':
+      return '/confectionery';
+    case 'gift-hampers':
+      return '/gift-hampers';
+    case 'cart':
+      return '/cart';
+    case 'dashboard':
+      return '/dashboard';
+    case 'admin':
+      return '/admin';
+    case 'home':
+    default:
+      return '/';
+  }
+};
+
 export default function App() {
   // AI Assistant State
   const [isAiAssistantOpen, setIsAiAssistantOpen] = useState(false);
@@ -41,14 +98,15 @@ export default function App() {
 
   // Navigation State & Back Navigation History Stack
   const [view, setView] = useState<ViewMode>(() => {
-    if (typeof window !== 'undefined' && window.location.pathname === '/privacy') {
-      return 'privacy';
+    if (typeof window !== 'undefined') {
+      return getViewFromPathname(window.location.pathname);
     }
     return 'home';
   });
   const [historyStack, setHistoryStack] = useState<ViewMode[]>(() => {
-    if (typeof window !== 'undefined' && window.location.pathname === '/privacy') {
-      return ['home', 'privacy'];
+    if (typeof window !== 'undefined') {
+      const initialView = getViewFromPathname(window.location.pathname);
+      return initialView === 'home' ? ['home'] : ['home', initialView];
     }
     return ['home'];
   });
@@ -56,10 +114,11 @@ export default function App() {
 
   // Initialize browser history and popstate listener for device & mobile back button support
   useEffect(() => {
-    const isPrivacyRoute = window.location.pathname === '/privacy';
-    const initialView = isPrivacyRoute ? 'privacy' : (window.history.state?.view || 'home');
+    const pathname = typeof window !== 'undefined' ? window.location.pathname : '/';
+    const initialView = window.history.state?.view || getViewFromPathname(pathname);
+    const targetPath = getPathnameFromView(initialView);
     if (!window.history.state || !window.history.state.view) {
-      window.history.replaceState({ view: initialView }, '', isPrivacyRoute ? '/privacy' : '');
+      window.history.replaceState({ view: initialView }, '', targetPath);
     }
 
     const handlePopState = (event: PopStateEvent) => {
@@ -69,10 +128,9 @@ export default function App() {
       }
       if (event.state && event.state.view) {
         setView(event.state.view as ViewMode);
-      } else if (window.location.pathname === '/privacy') {
-        setView('privacy');
       } else {
-        setView('home');
+        const viewFromUrl = getViewFromPathname(window.location.pathname);
+        setView(viewFromUrl);
       }
     };
 
@@ -83,7 +141,7 @@ export default function App() {
   // Unified Navigate handler with browser history push
   const navigateTo = (nextView: ViewMode, replace: boolean = false) => {
     if (nextView === view) return;
-    const path = nextView === 'privacy' ? '/privacy' : '/';
+    const path = getPathnameFromView(nextView);
     if (replace) {
       window.history.replaceState({ view: nextView }, '', path);
     } else {
