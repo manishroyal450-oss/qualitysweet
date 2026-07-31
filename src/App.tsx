@@ -18,7 +18,9 @@ import DashboardView from './components/DashboardView';
 import CartView from './components/CartView';
 import AdminView from './components/AdminView';
 import ProfileView from './components/ProfileView';
+import PrivacyPolicyView from './components/PrivacyPolicyView';
 import AiAssistantWidget from './components/AiAssistantWidget';
+import OfflineOverlay from './components/OfflineOverlay';
 import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X, Sparkles, Bot } from 'lucide-react';
 
 export default function App() {
@@ -38,14 +40,26 @@ export default function App() {
   });
 
   // Navigation State & Back Navigation History Stack
-  const [view, setView] = useState<ViewMode>('home');
-  const [historyStack, setHistoryStack] = useState<ViewMode[]>(['home']);
+  const [view, setView] = useState<ViewMode>(() => {
+    if (typeof window !== 'undefined' && window.location.pathname === '/privacy') {
+      return 'privacy';
+    }
+    return 'home';
+  });
+  const [historyStack, setHistoryStack] = useState<ViewMode[]>(() => {
+    if (typeof window !== 'undefined' && window.location.pathname === '/privacy') {
+      return ['home', 'privacy'];
+    }
+    return ['home'];
+  });
   const [showWhatsappPopup, setShowWhatsappPopup] = useState(true);
 
   // Initialize browser history and popstate listener for device & mobile back button support
   useEffect(() => {
+    const isPrivacyRoute = window.location.pathname === '/privacy';
+    const initialView = isPrivacyRoute ? 'privacy' : (window.history.state?.view || 'home');
     if (!window.history.state || !window.history.state.view) {
-      window.history.replaceState({ view: 'home' }, '', '');
+      window.history.replaceState({ view: initialView }, '', isPrivacyRoute ? '/privacy' : '');
     }
 
     const handlePopState = (event: PopStateEvent) => {
@@ -55,6 +69,8 @@ export default function App() {
       }
       if (event.state && event.state.view) {
         setView(event.state.view as ViewMode);
+      } else if (window.location.pathname === '/privacy') {
+        setView('privacy');
       } else {
         setView('home');
       }
@@ -67,10 +83,11 @@ export default function App() {
   // Unified Navigate handler with browser history push
   const navigateTo = (nextView: ViewMode, replace: boolean = false) => {
     if (nextView === view) return;
+    const path = nextView === 'privacy' ? '/privacy' : '/';
     if (replace) {
-      window.history.replaceState({ view: nextView }, '', '');
+      window.history.replaceState({ view: nextView }, '', path);
     } else {
-      window.history.pushState({ view: nextView }, '', '');
+      window.history.pushState({ view: nextView }, '', path);
       setHistoryStack((prev) => [...prev, nextView]);
     }
     setView(nextView);
@@ -453,6 +470,14 @@ export default function App() {
             onActiveUserChange={setActiveUser}
           />
         )}
+
+        {view === 'privacy' && (
+          <PrivacyPolicyView 
+            onViewChange={(v) => navigateTo(v)}
+            activeUser={activeUser}
+            onActiveUserChange={setActiveUser}
+          />
+        )}
       </main>
 
       {/* Beautiful Footer */}
@@ -508,9 +533,19 @@ export default function App() {
           </div>
         </div>
 
-        <div className="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] text-slate-500" id="footer-copyright-box">
+        <div className="max-w-7xl mx-auto pt-6 flex flex-col sm:flex-row justify-between items-center text-[10px] text-slate-500 gap-2" id="footer-copyright-box">
           <span>&copy; {new Date().getFullYear()} Quality Sweets & Restaurant. All Rights Reserved.</span>
-          <span className="mt-2 sm:mt-0">Crafted with Pure Ingredients and Desi Ghee</span>
+          <div className="flex items-center gap-3">
+            <button
+              onClick={() => navigateTo('privacy')}
+              className="hover:text-emerald-400 font-bold transition-colors underline cursor-pointer"
+              id="footer-privacy-policy-link"
+            >
+              Privacy Policy
+            </button>
+            <span>•</span>
+            <span>Crafted with Pure Ingredients and Desi Ghee</span>
+          </div>
         </div>
       </footer>
 
@@ -603,6 +638,9 @@ export default function App() {
         onAddToCart={handleAddToCart}
         onViewChange={(v) => navigateTo(v)}
       />
+
+      {/* Offline Detection & Dark Blur Overlay */}
+      <OfflineOverlay />
     </div>
   );
 }

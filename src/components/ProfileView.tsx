@@ -16,7 +16,8 @@ import {
   Edit3, 
   Save, 
   X,
-  Sparkles
+  Sparkles,
+  ShieldCheck
 } from 'lucide-react';
 import { ViewMode, Order, UserProfile } from '../types';
 
@@ -459,6 +460,19 @@ export default function ProfileView({ onViewChange, orders, activeUser, onActive
                 </button>
               </form>
             )}
+
+            <div className="pt-6 mt-6 border-t border-slate-100 flex items-center justify-between text-xs text-slate-500">
+              <span className="font-medium">100% Secure & Private Local Storage</span>
+              <button
+                type="button"
+                onClick={() => onViewChange('privacy')}
+                className="inline-flex items-center gap-1.5 text-emerald-700 hover:text-emerald-800 font-bold hover:underline"
+                id="link-auth-privacy-policy"
+              >
+                <ShieldCheck className="h-4 w-4 text-emerald-600" />
+                Privacy Policy
+              </button>
+            </div>
           </div>
         </motion.div>
       ) : (
@@ -580,6 +594,15 @@ export default function ProfileView({ onViewChange, orders, activeUser, onActive
                       <LogOut className="h-3.5 w-3.5" /> Sign Out
                     </button>
                   </div>
+
+                  <button
+                    onClick={() => onViewChange('privacy')}
+                    className="w-full mt-2 py-2 px-3 bg-slate-50 hover:bg-slate-100 text-slate-600 rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 transition border border-slate-200/60"
+                    id="btn-profile-privacy-link"
+                  >
+                    <ShieldCheck className="h-3.5 w-3.5 text-emerald-600" />
+                    Privacy Policy & Data Rights
+                  </button>
                 </div>
               )}
             </div>
