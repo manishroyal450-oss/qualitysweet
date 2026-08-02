@@ -273,7 +273,7 @@ export default function PrivacyPolicyView({ onViewChange, activeUser, onActiveUs
                 <Phone className="h-3.5 w-3.5" />
                 Phone / WhatsApp
               </div>
-              <p className="text-xs font-mono font-semibold text-slate-200">+91 63986 82424</p>
+              <p className="text-xs font-mono font-semibold text-slate-200">+91 81710 69007 / +91 63986 82424</p>
             </div>
 
             <div className="p-3.5 bg-slate-800/60 rounded-2xl border border-slate-700/50 space-y-1">

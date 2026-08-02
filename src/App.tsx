@@ -578,13 +578,19 @@ export default function App() {
                 <a href="#facebook" className="hover:text-amber-500 transition-colors" aria-label="Facebook"><Facebook className="h-5 w-5" /></a>
               </div>
               <a href="tel:+916398682424" className="hover:text-amber-500 transition-colors flex items-center gap-1.5">
-                <PhoneCall className="h-4 w-4 text-amber-500" /> Phone: +91 63986 82424
+                <PhoneCall className="h-4 w-4 text-amber-500" /> Phone: +91 81710 69007 / +91 63986 82424
+              </a>
+              <a href="https://wa.me/918171069007" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 font-bold">
+                <svg className="w-4 h-4 fill-emerald-500" viewBox="0 0 24 24">
+                  <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.968C16.628 1.97 14.161.944 11.54.944c-5.44 0-9.866 4.369-9.87 9.8.002 2.042.547 4.039 1.584 5.787L2.176 21.6l5.221-1.354z" />
+                </svg>
+                WhatsApp (Owner 1): +91 81710 69007
               </a>
               <a href="https://wa.me/916398682424" target="_blank" rel="noopener noreferrer" className="hover:text-emerald-400 transition-colors flex items-center gap-1.5 font-bold">
                 <svg className="w-4 h-4 fill-emerald-500" viewBox="0 0 24 24">
                   <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.502-5.724-1.455L0 24zm6.59-4.846c1.6.95 3.188 1.449 4.825 1.451 5.436 0 9.86-4.37 9.864-9.799.002-2.63-1.023-5.101-2.885-6.968C16.628 1.97 14.161.944 11.54.944c-5.44 0-9.866 4.369-9.87 9.8.002 2.042.547 4.039 1.584 5.787L2.176 21.6l5.221-1.354z" />
                 </svg>
-                WhatsApp: +91 63986 82424
+                WhatsApp (Owner 2): +91 63986 82424
               </a>
             </div>
             <span className="text-[10px] block text-slate-500">Licensed under Food Safety and Standards Authority of India (FSSAI).</span>
@@ -646,14 +652,22 @@ export default function App() {
                 <p className="text-[10px] text-slate-500 leading-relaxed">
                   Need sweet boxes, table booking or fast catering? Chat with us instantly!
                 </p>
-                <div className="pt-1.5">
+                <div className="pt-1.5 flex flex-wrap gap-1.5">
+                  <a
+                    href="https://wa.me/918171069007?text=Hello!%20I%20am%20interested%20in%20ordering%20sweets%20/%20food."
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] px-2.5 py-1.5 rounded-lg transition shadow-md"
+                  >
+                    Owner 1: +91 81710 69007
+                  </a>
                   <a
                     href="https://wa.me/916398682424?text=Hello!%20I%20am%20interested%20in%20ordering%20sweets%20/%20food."
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-[10px] px-3 py-1.5 rounded-lg transition shadow-md"
+                    className="inline-flex items-center gap-1 bg-[#128C7E] hover:bg-[#0e7065] text-white font-extrabold text-[10px] px-2.5 py-1.5 rounded-lg transition shadow-md"
                   >
-                    Chat +91 63986 82424
+                    Owner 2: +91 63986 82424
                   </a>
                 </div>
               </div>
