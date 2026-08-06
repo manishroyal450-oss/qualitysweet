@@ -13,8 +13,7 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock,
-  Printer,
-  Compass
+  Printer
 } from 'lucide-react';
 
 interface CartViewProps {
@@ -31,23 +30,6 @@ interface CartViewProps {
 const OWNER_UPI_ID = "6398682424@ptyes";
 const SHOP_NAME = "Shivam Agrawal";
 
-// Shop Coordinates (Quality Sweets, Chandpur)
-const SHOP_LAT = 29.1383;
-const SHOP_LNG = 78.2721;
-
-// Haversine Formula for Distance Calculation (in Km)
-function calculateDistance(lat1: number, lon1: number, lat2: number, lon2: number): number {
-  const R = 6371; // Radius of Earth in km
-  const dLat = (lat2 - lat1) * Math.PI / 180;
-  const dLon = (lon2 - lon1) * Math.PI / 180;
-  const a = 
-    Math.sin(dLat/2) * Math.sin(dLat/2) +
-    Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * 
-    Math.sin(dLon/2) * Math.sin(dLon/2);
-  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-  return R * c; 
-}
-
 export default function CartView({
   cart,
   onUpdateQuantity,
@@ -58,73 +40,7 @@ export default function CartView({
   activeUser
 }: CartViewProps) {
   const [showPaytmQr, setShowPaytmQr] = useState(true);
-  const [isCheckingLocation, setIsCheckingLocation] = useState(false);
-  const [userDistance, setUserDistance] = useState<number | null>(null);
-  const [locationStatus, setLocationStatus] = useState<string | null>(null);
 
-  // Order Delivery Validation Function
-  const checkDeliveryEligibility = (userLat: number, userLng: number) => {
-    const distance = calculateDistance(SHOP_LAT, SHOP_LNG, userLat, userLng);
-    setUserDistance(distance);
-    
-    if (distance <= 5.0) {
-      const msg = "Delivery available! Distance: " + distance.toFixed(2) + " km";
-      setLocationStatus("✅ " + msg);
-      alert(msg);
-      return true;
-    } else {
-      const msg = "Sorry, we only deliver within 5 km. Your location is " + distance.toFixed(2) + " km away.";
-      setLocationStatus("❌ " + msg);
-      alert(msg);
-      return false;
-    }
-  };
-
-  const handleDetectGpsLocation = () => {
-    if (!navigator.geolocation) {
-      alert("Geolocation is not supported by your browser");
-      return;
-    }
-
-    setIsCheckingLocation(true);
-    setLocationStatus("Detecting location...");
-
-    navigator.geolocation.getCurrentPosition(
-      (position) => {
-        setIsCheckingLocation(false);
-        const userLat = position.coords.latitude;
-        const userLng = position.coords.longitude;
-        checkDeliveryEligibility(userLat, userLng);
-      },
-      (error) => {
-        setIsCheckingLocation(false);
-        setLocationStatus("Location access denied or unavailable.");
-        alert("Unable to retrieve your location. Please ensure location access is enabled in your browser: " + error.message);
-      },
-      { enableHighAccuracy: true, timeout: 10000, maximumAge: 0 }
-    );
-  };
-
-  // Helper to open Paytm or trigger UPI link
-  const openPaytm = (amount: number) => {
-    if (amount <= 0) {
-      alert("Kripya cart me items add karein!");
-      return;
-    }
-
-    const encodedName = encodeURIComponent(SHOP_NAME);
-    const note = encodeURIComponent("Quality Sweets Order");
-    const upiUrl = `upi://pay?pa=${OWNER_UPI_ID}&pn=${encodedName}&am=${amount}&cu=INR&tn=${note}`;
-
-    setShowPaytmQr(true);
-
-    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
-
-    if (isMobile) {
-      window.location.href = upiUrl;
-    }
-  };
-  // Form details
   const [orderDetails, setOrderDetails] = useState<OrderDetails>(() => {
     try {
       const activeUserStr = localStorage.getItem('activeUser');
@@ -161,6 +77,33 @@ export default function CartView({
       }));
     }
   }, [activeUser]);
+
+  // Helper to open Paytm or trigger UPI link
+  const openPaytm = (amount: number) => {
+    if (amount <= 0) {
+      alert("Kripya cart me items add karein!");
+      return;
+    }
+
+    if (orderDetails.orderType === 'delivery') {
+      if (!orderDetails.address.trim()) {
+        alert("Kripya delivery address enter karein!");
+        return;
+      }
+    }
+
+    const encodedName = encodeURIComponent(SHOP_NAME);
+    const note = encodeURIComponent("Quality Sweets Order");
+    const upiUrl = `upi://pay?pa=${OWNER_UPI_ID}&pn=${encodedName}&am=${amount}&cu=INR&tn=${note}`;
+
+    setShowPaytmQr(true);
+
+    const isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+    if (isMobile) {
+      window.location.href = upiUrl;
+    }
+  };
 
   const [checkoutComplete, setCheckoutComplete] = useState(false);
   const [receiptId, setReceiptId] = useState('');
@@ -242,8 +185,8 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
 
     // Delivery location check
     if (orderDetails.orderType === 'delivery') {
-      if (userDistance !== null && userDistance > 5.0) {
-        alert("Sorry, we only deliver within 5 km. Your location is " + userDistance.toFixed(2) + " km away.");
+      if (!orderDetails.address.trim()) {
+        alert("Kripya delivery address enter karein!");
         return;
       }
     }
@@ -722,58 +665,20 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
                 )}
 
                 {orderDetails.orderType === 'delivery' && (
-                  <div className="space-y-3" id="checkout-delivery-addr">
-                    <div className="space-y-1">
-                      <label className="text-xs font-bold text-slate-600 flex items-center gap-1">
-                        <MapPin className="h-3.5 w-3.5 text-slate-400" />
-                        Full Address *
-                      </label>
-                      <textarea
-                        id="checkout-address-textarea"
-                        required
-                        rows={2}
-                        placeholder="Flat, building, block, landmark, pincode"
-                        value={orderDetails.address}
-                        onChange={(e) => setOrderDetails({ ...orderDetails, address: e.target.value })}
-                        className="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
-                      />
-                    </div>
-
-                    {/* GPS Delivery Area Verification Widget */}
-                    <div className="bg-amber-50/70 border border-amber-200 rounded-xl p-3 text-xs space-y-2">
-                      <div className="flex items-center justify-between">
-                        <span className="font-bold text-slate-800 flex items-center gap-1">
-                          <Compass className="h-3.5 w-3.5 text-orange-600" />
-                          5 km Delivery Area Check (Chandpur)
-                        </span>
-                        {userDistance !== null && (
-                          <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold ${
-                            userDistance <= 5.0 ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
-                          }`}>
-                            {userDistance.toFixed(2)} km away
-                          </span>
-                        )}
-                      </div>
-
-                      <button
-                        type="button"
-                        id="check-gps-eligibility-btn"
-                        onClick={handleDetectGpsLocation}
-                        disabled={isCheckingLocation}
-                        className="w-full py-2 px-3 bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white font-bold rounded-lg transition-all shadow-sm flex items-center justify-center gap-1.5 cursor-pointer disabled:opacity-60"
-                      >
-                        <MapPin className="h-3.5 w-3.5" />
-                        <span>{isCheckingLocation ? 'Detecting Location...' : '📍 Check GPS Delivery Eligibility'}</span>
-                      </button>
-
-                      {locationStatus && (
-                        <p className={`text-[11px] font-semibold text-center ${
-                          userDistance !== null && userDistance <= 5.0 ? 'text-emerald-700' : 'text-slate-600'
-                        }`}>
-                          {locationStatus}
-                        </p>
-                      )}
-                    </div>
+                  <div className="space-y-1.5" id="checkout-delivery-addr">
+                    <label className="text-xs font-bold text-slate-600 flex items-center gap-1">
+                      <MapPin className="h-3.5 w-3.5 text-slate-400" />
+                      Delivery Address *
+                    </label>
+                    <textarea
+                      id="checkout-address-textarea"
+                      required
+                      rows={2}
+                      placeholder="Enter full delivery address (House/Flat No., Landmark, Locality, City)"
+                      value={orderDetails.address}
+                      onChange={(e) => setOrderDetails({ ...orderDetails, address: e.target.value })}
+                      className="w-full px-4 py-2.5 text-xs rounded-xl border border-slate-200 outline-none focus:border-emerald-500 focus:ring-1 focus:ring-emerald-200 transition-all resize-none"
+                    />
                   </div>
                 )}
               </div>

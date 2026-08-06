@@ -1,6 +1,6 @@
 import React from 'react';
 import { ViewMode, UserProfile } from '../types';
-import { Store, Utensils, LayoutDashboard, ShoppingBag, Home, ShieldCheck, User, Sparkles, ArrowLeft, Cake, Gift } from 'lucide-react';
+import { Store, Utensils, LayoutDashboard, ShoppingBag, Home, ShieldCheck, User, Sparkles, ArrowLeft, Cake, Gift, Download, Smartphone } from 'lucide-react';
 import quality3dLogo from '../assets/images/quality_3d_clean_logo_1785004219061.jpg';
 
 interface NavbarProps {
@@ -66,8 +66,22 @@ export default function Navbar({ currentView, onViewChange, cartCount, activeUse
               </div>
             </div>
 
-            {/* Cart, Profile & Admin Controls */}
+            {/* Cart, Profile, Download App & Admin Controls */}
             <div className="flex items-center space-x-2 sm:space-x-2.5" id="nav-controls">
+              {/* Direct Download App Link Button */}
+              <a
+                href="https://qualitysweetapk.lovable.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                id="header-download-app-btn"
+                className="flex items-center gap-1.5 px-3 py-2 sm:px-3.5 sm:py-2 rounded-xl bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white hover:brightness-110 transition-all duration-200 border border-emerald-400/30 shadow-md shadow-emerald-600/20 font-extrabold text-xs shrink-0 cursor-pointer group"
+                aria-label="Download App"
+              >
+                <Smartphone className="h-4 w-4 text-emerald-100 group-hover:scale-110 transition-transform" />
+                <span className="hidden xs:inline">Download App</span>
+                <Download className="h-3.5 w-3.5 text-amber-300 animate-pulse" />
+              </a>
+
               {/* AI Search Assistant Button */}
               {onOpenAiAssistant && (
                 <button

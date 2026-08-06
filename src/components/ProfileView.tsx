@@ -520,7 +520,8 @@ export default function ProfileView({ onViewChange, orders, activeUser, onActive
                     <textarea
                       value={address}
                       onChange={(e) => setAddress(e.target.value)}
-                      rows={3}
+                      rows={2}
+                      placeholder="Enter delivery address"
                       className="w-full px-3 py-2 bg-slate-50 border border-slate-200 focus:border-emerald-500 focus:bg-white rounded-xl text-xs font-semibold outline-none text-slate-800 resize-none"
                       required
                     />

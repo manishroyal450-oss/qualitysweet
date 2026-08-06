@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
 import { ViewMode } from '../types';
-import { Store, Utensils, Shield, Sparkles, Plus, AlertCircle, ArrowRight, MapPin, Clock, Phone, Compass, Map } from 'lucide-react';
+import { Store, Utensils, Shield, Sparkles, Plus, AlertCircle, ArrowRight, MapPin, Clock, Phone, Compass, Map, Download, Smartphone, ExternalLink } from 'lucide-react';
 import sweets3dBanner from '../assets/images/sweets_3d_banner_1784869496849.jpg';
 import restaurant3dBanner from '../assets/images/restaurant_3d_banner_1784869701727.jpg';
 import quality3dLogo from '../assets/images/quality_3d_clean_logo_1785004219061.jpg';
@@ -84,6 +84,29 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
               </div>
             </motion.div>
           </div>
+
+          {/* Prominent App Download Button */}
+          <motion.div 
+            initial={{ opacity: 0, y: 15 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3, duration: 0.5 }}
+            className="pt-4 flex justify-center items-center" 
+            id="download-app-hero-container"
+          >
+            <a
+              href="https://qualitysweetapk.lovable.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              id="download-app-btn"
+              className="group relative inline-flex items-center gap-3 px-8 py-4 rounded-2xl bg-gradient-to-r from-emerald-600 via-green-600 to-teal-600 text-white font-extrabold text-base sm:text-lg shadow-xl shadow-emerald-600/30 hover:shadow-2xl hover:scale-105 active:scale-95 transition-all duration-300 border-2 border-emerald-300/40 cursor-pointer overflow-hidden"
+            >
+              <div className="absolute inset-0 bg-gradient-to-r from-white/0 via-white/20 to-white/0 -translate-x-full group-hover:translate-x-full transition-transform duration-1000 ease-in-out pointer-events-none" />
+              <Smartphone className="h-6 w-6 text-emerald-100 group-hover:rotate-12 transition-transform shrink-0" />
+              <span className="tracking-wide">Download App</span>
+              <Download className="h-5 w-5 text-amber-300 animate-bounce group-hover:translate-y-0.5 transition-transform shrink-0" />
+              <ExternalLink className="h-4 w-4 text-emerald-200 opacity-80 shrink-0" />
+            </a>
+          </motion.div>
         </div>
       </section>
 
