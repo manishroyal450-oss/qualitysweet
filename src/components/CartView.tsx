@@ -50,7 +50,7 @@ export default function CartView({
           customerName: user.fullName || '',
           customerPhone: user.contactNumber || '',
           orderType: 'delivery',
-          tableNumber: 'Table 5',
+          tableNumber: 'Table 1',
           address: user.address ? `${user.address} (PIN: ${user.pinCode || ''})` : ''
         };
       }
@@ -61,7 +61,7 @@ export default function CartView({
       customerName: '',
       customerPhone: '',
       orderType: 'dine-in',
-      tableNumber: 'Table 5',
+      tableNumber: 'Table 1',
       address: ''
     };
   });
@@ -144,7 +144,7 @@ export default function CartView({
 
     let serviceInfo = '';
     if (details.orderType === 'dine-in') {
-      serviceInfo = `📍 *Dining Spot:* ${details.tableNumber || 'Table 5'}`;
+      serviceInfo = `📍 *Dining Spot:* ${details.tableNumber || 'Table 1'}`;
     } else if (details.orderType === 'delivery') {
       serviceInfo = `🏠 *Delivery Address:* ${details.address || 'Address not specified'}`;
     } else {
@@ -655,11 +655,18 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
                       onChange={(e) => setOrderDetails({ ...orderDetails, tableNumber: e.target.value })}
                       className="w-full px-4 py-2 text-xs rounded-xl border border-slate-200 bg-white outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-200 transition-all"
                     >
-                      <option value="Table 1">Table 1 (Family Box)</option>
-                      <option value="Table 2">Table 2 (Couples Nest)</option>
-                      <option value="Table 3">Table 3 (Diner Counter)</option>
-                      <option value="Table 4">Table 4 (Lounge Corner)</option>
-                      <option value="Table 5">Table 5 (Terrace View)</option>
+                      <option value="Table 1">Table 1</option>
+                      <option value="Table 2">Table 2</option>
+                      <option value="Table 3">Table 3</option>
+                      <option value="Table 4">Table 4</option>
+                      <option value="Table 5">Table 5</option>
+                      <option value="Table 6">Table 6</option>
+                      <option value="Table 7">Table 7</option>
+                      <option value="Table 8">Table 8</option>
+                      <option value="Table 9">Table 9</option>
+                      <option value="Table 10">Table 10</option>
+                      <option value="Table 11">Table 11</option>
+                      <option value="Table 12">Table 12</option>
                     </select>
                   </div>
                 )}
