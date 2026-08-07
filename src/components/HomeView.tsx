@@ -1,7 +1,7 @@
 import React from 'react';
 import { motion } from 'motion/react';
-import { ViewMode } from '../types';
-import { Store, Utensils, Shield, Sparkles, Plus, AlertCircle, ArrowRight, MapPin, Clock, Phone, Compass, Map, Download, Smartphone, ExternalLink } from 'lucide-react';
+import { ViewMode, CartItem } from '../types';
+import { Store, Utensils, Shield, Sparkles, Plus, AlertCircle, ArrowRight, MapPin, Clock, Phone, Compass, Map, Download, Smartphone, ExternalLink, ShoppingCart, ShoppingBag, Trash2, Check } from 'lucide-react';
 import sweets3dBanner from '../assets/images/sweets_3d_banner_1784869496849.jpg';
 import restaurant3dBanner from '../assets/images/restaurant_3d_banner_1784869701727.jpg';
 import quality3dLogo from '../assets/images/quality_3d_clean_logo_1785004219061.jpg';
@@ -10,9 +10,19 @@ interface HomeViewProps {
   onViewChange: (view: ViewMode) => void;
   sweetCount: number;
   restaurantCount: number;
+  cart?: CartItem[];
+  onUpdateCartQuantity?: (id: string, quantity: number) => void;
+  onRemoveFromCart?: (id: string) => void;
 }
 
-export default function HomeView({ onViewChange, sweetCount, restaurantCount }: HomeViewProps) {
+export default function HomeView({ 
+  onViewChange, 
+  sweetCount, 
+  restaurantCount,
+  cart = [],
+  onUpdateCartQuantity,
+  onRemoveFromCart
+}: HomeViewProps) {
   const sweetMax = 500;
   const restaurantMax = 200;
 
@@ -107,6 +117,77 @@ export default function HomeView({ onViewChange, sweetCount, restaurantCount }: 
               <ExternalLink className="h-4 w-4 text-emerald-200 opacity-80 shrink-0" />
             </a>
           </motion.div>
+
+          {/* Hero Section Cart Popup Card when item selected */}
+          {cart && cart.length > 0 && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9, y: 20 }}
+              animate={{ opacity: 1, scale: 1, y: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 25 }}
+              className="mt-6 max-w-xl mx-auto overflow-hidden rounded-3xl bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white p-5 sm:p-6 shadow-2xl border-2 border-emerald-400/60 relative group"
+              id="hero-cart-popup-card"
+            >
+              {/* Decorative Ambient Glow */}
+              <div className="absolute -top-12 -right-12 w-36 h-36 bg-emerald-500/20 rounded-full blur-2xl pointer-events-none"></div>
+
+              <div className="flex items-center justify-between border-b border-emerald-500/30 pb-3 mb-3">
+                <div className="flex items-center gap-2">
+                  <div className="relative">
+                    <ShoppingCart className="h-6 w-6 text-emerald-400 animate-bounce" />
+                    <span className="absolute -top-2 -right-2 bg-amber-400 text-slate-950 text-[10px] font-black px-1.5 py-0.5 rounded-full">
+                      {cart.reduce((s, c) => s + c.quantity, 0)}
+                    </span>
+                  </div>
+                  <h3 className="text-base sm:text-lg font-black text-amber-300 tracking-wide uppercase">
+                    Your Item In Cart
+                  </h3>
+                </div>
+                <span className="text-xs font-bold text-emerald-300 bg-emerald-900/80 px-3 py-1 rounded-full border border-emerald-500/40">
+                  ₹{cart.reduce((sum, c) => sum + c.item.price * c.quantity, 0)} Total
+                </span>
+              </div>
+
+              {/* Selected Cart Items List Preview */}
+              <div className="space-y-2 max-h-48 overflow-y-auto pr-1 my-3 scrollbar-thin">
+                {cart.map((cartItem) => (
+                  <div key={cartItem.item.id} className="flex items-center justify-between bg-white/10 p-2.5 rounded-2xl border border-white/10">
+                    <div className="flex items-center gap-3">
+                      <img src={cartItem.item.image} alt={cartItem.item.name} className="w-10 h-10 object-cover rounded-xl border border-emerald-400/30 shrink-0" />
+                      <div className="text-left">
+                        <h4 className="text-xs font-bold text-white line-clamp-1">{cartItem.item.name}</h4>
+                        <p className="text-[10px] text-emerald-300">₹{cartItem.item.price} × {cartItem.quantity}</p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <span className="text-xs font-black text-amber-300">₹{cartItem.item.price * cartItem.quantity}</span>
+                      {onRemoveFromCart && (
+                        <button
+                          onClick={() => onRemoveFromCart(cartItem.item.id)}
+                          className="p-1 text-slate-400 hover:text-red-400 transition-colors"
+                          title="Remove item"
+                        >
+                          <Trash2 className="h-3.5 w-3.5" />
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {/* Hero Action Button to View Cart */}
+              <div className="pt-2 flex items-center justify-between gap-3">
+                <button
+                  onClick={() => onViewChange('cart')}
+                  className="w-full py-3.5 px-6 rounded-2xl bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-slate-950 font-black text-sm shadow-xl shadow-emerald-500/30 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  id="hero-cart-view-btn"
+                >
+                  <ShoppingBag className="h-4 w-4" />
+                  <span>View Cart & Place Order</span>
+                  <ArrowRight className="h-4 w-4" />
+                </button>
+              </div>
+            </motion.div>
+          )}
         </div>
       </section>
 

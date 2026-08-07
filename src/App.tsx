@@ -21,7 +21,7 @@ import ProfileView from './components/ProfileView';
 import PrivacyPolicyView from './components/PrivacyPolicyView';
 import AiAssistantWidget from './components/AiAssistantWidget';
 import OfflineOverlay from './components/OfflineOverlay';
-import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X, Sparkles, Bot } from 'lucide-react';
+import { AlertCircle, Store, ChefHat, Instagram, Facebook, PhoneCall, MapPin, MessageSquare, X, Sparkles, Bot, CheckCircle2, ShoppingCart, ArrowRight } from 'lucide-react';
 
 const getViewFromPathname = (pathname: string): ViewMode => {
   const cleanPath = pathname.replace(/\/+$/, '') || '/';
@@ -379,6 +379,19 @@ export default function App() {
     }
   };
 
+  // Cart Notification State
+  const [cartNotificationItem, setCartNotificationItem] = useState<{ item: MenuItem; quantity: number } | null>(null);
+
+  // Auto hide cart popup notification after 6 seconds
+  useEffect(() => {
+    if (cartNotificationItem) {
+      const timer = setTimeout(() => {
+        setCartNotificationItem(null);
+      }, 6000);
+      return () => clearTimeout(timer);
+    }
+  }, [cartNotificationItem]);
+
   // Cart Operations
   const handleAddToCart = (item: MenuItem) => {
     setCart((prev) => {
@@ -390,6 +403,7 @@ export default function App() {
       }
       return [...prev, { item, quantity: 1 }];
     });
+    setCartNotificationItem({ item, quantity: 1 });
   };
 
   const handleUpdateCartQuantity = (id: string, quantity: number) => {
@@ -432,6 +446,9 @@ export default function App() {
             onViewChange={(v) => navigateTo(v)} 
             sweetCount={sweets.length} 
             restaurantCount={restaurant.length} 
+            cart={cart}
+            onUpdateCartQuantity={handleUpdateCartQuantity}
+            onRemoveFromCart={handleRemoveFromCart}
           />
         )}
 
@@ -713,6 +730,52 @@ export default function App() {
 
       {/* Offline Detection & Dark Blur Overlay */}
       <OfflineOverlay />
+
+      {/* Global Floating Toast Popup when Item Selected for Cart */}
+      {cartNotificationItem && (
+        <div
+          className="fixed bottom-20 right-4 left-4 sm:left-auto sm:right-6 sm:max-w-md bg-gradient-to-r from-slate-900 via-emerald-950 to-slate-900 text-white p-4 rounded-2xl shadow-2xl border-2 border-emerald-400 z-50 flex items-center justify-between gap-3 backdrop-blur-md animate-bounce-short"
+          id="cart-added-popup-toast"
+        >
+          <div className="flex items-center gap-3">
+            <img
+              src={cartNotificationItem.item.image}
+              alt={cartNotificationItem.item.name}
+              className="w-12 h-12 rounded-xl object-cover border border-emerald-400 shrink-0"
+            />
+            <div className="text-left">
+              <div className="flex items-center gap-1">
+                <CheckCircle2 className="h-4 w-4 text-emerald-400 shrink-0" />
+                <span className="text-[11px] font-black text-amber-300 uppercase tracking-wider">
+                  Your Item In Cart!
+                </span>
+              </div>
+              <p className="text-xs font-bold text-white line-clamp-1">{cartNotificationItem.item.name}</p>
+              <p className="text-[11px] font-semibold text-emerald-300">₹{cartNotificationItem.item.price}</p>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2 shrink-0">
+            <button
+              onClick={() => {
+                setCartNotificationItem(null);
+                navigateTo('cart');
+              }}
+              className="px-3.5 py-2 bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-black text-xs rounded-xl shadow transition-all cursor-pointer flex items-center gap-1"
+            >
+              <span>View Cart</span>
+              <ArrowRight className="h-3.5 w-3.5" />
+            </button>
+            <button
+              onClick={() => setCartNotificationItem(null)}
+              className="p-1.5 text-slate-400 hover:text-white rounded-lg hover:bg-slate-800 transition-colors cursor-pointer"
+              aria-label="Close popup"
+            >
+              <X className="h-4 w-4" />
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
