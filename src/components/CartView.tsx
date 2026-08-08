@@ -728,54 +728,11 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
                 </div>
               </div>
 
-              {/* Instructions Notice Banner in Hindi & English */}
-              <div className="bg-amber-50 border border-amber-300 rounded-2xl p-3.5 shadow-sm space-y-2 text-left" id="payment-whatsapp-instructions">
-                <div className="flex items-start gap-2">
-                  <span className="text-base leading-none">⚠️</span>
-                  <div className="space-y-1 text-xs">
-                    <p className="font-bold text-amber-900 leading-snug">
-                      🇮🇳 <span className="underline decoration-amber-400">महत्वपूर्ण सूचना (Important Note):</span>
-                    </p>
-                    <p className="text-amber-800 font-medium leading-relaxed">
-                      पहले नीचे दिए गए <strong>WhatsApp</strong> बटन से <strong>दोनों Owner को ऑर्डर की डिटेल भेजना जरूरी है</strong>, उसके बाद ही आप Payment कर सकते हैं।
-                    </p>
-                    <p className="text-amber-700 text-[11px] leading-relaxed pt-0.5 border-t border-amber-200/60">
-                      It is mandatory to send your order details to BOTH Owner 1 and Owner 2 on WhatsApp using the buttons below, and then you can complete your payment.
-                    </p>
-                  </div>
-                </div>
-              </div>
-
-              {/* Order WhatsApp Direct Buttons */}
-              <div className="space-y-2 pt-1" id="order-whatsapp-buttons-container">
-                <span className="text-xs font-bold text-slate-800 block text-center">
-                  👇 Step 1: Send Order Details on WhatsApp First:
-                </span>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3" id="order-buttons">
-                  <button
-                    type="button"
-                    id="order-btn-owner1"
-                    onClick={() => sendDirectOrder('918171069007')}
-                    className="wa-btn py-3.5 px-4 bg-[#25D366] hover:bg-[#1ebd59] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    📱 Send Order to Owner 1
-                  </button>
-                  <button
-                    type="button"
-                    id="order-btn-owner2"
-                    onClick={() => sendDirectOrder('916398682424')}
-                    className="wa-btn wa-btn-2 py-3.5 px-4 bg-[#128C7E] hover:bg-[#0e7065] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    📱 Send Order to Owner 2
-                  </button>
-                </div>
-              </div>
-
-              {/* Paytm Direct UPI Payment Card */}
+              {/* Step 1: Paytm Direct UPI Payment Card (QR Code) */}
               <div className="bg-slate-50 border border-slate-200 rounded-2xl p-4 text-center space-y-3" id="paytm-checkout-box">
                 <div className="flex items-center justify-between border-b border-slate-200/60 pb-2">
                   <div className="text-left">
-                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Step 2: Pay via Paytm / UPI</h4>
+                    <h4 className="font-bold text-slate-900 text-xs uppercase tracking-wide">Step 1: Scan & Pay via QR Code / UPI</h4>
                     <p className="text-[10px] text-slate-500 font-mono">Quality Sweets & Food</p>
                   </div>
                   <span className="text-[10px] font-bold text-emerald-800 bg-emerald-100 px-2 py-0.5 rounded-full">
@@ -788,50 +745,89 @@ Please confirm this order on WhatsApp. Thank you! 🙏`;
                   <span className="text-lg font-black text-emerald-700 font-mono">₹<span id="order-amount">{total}</span></span>
                 </div>
 
-                <button
-                  type="button"
-                  id="paytm-btn"
-                  onClick={() => openPaytm(total)}
-                  className="w-full py-3 px-4 bg-[#002e6e] hover:bg-[#001f4d] text-white font-bold text-xs rounded-xl shadow transition-all flex items-center justify-center gap-2 cursor-pointer"
-                >
-                  <svg className="w-4 h-4 fill-current shrink-0" viewBox="0 0 24 24">
-                    <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-1 15h-2v-6h2v6zm0-8h-2V7h2v2z"/>
-                  </svg>
-                  <span>Pay via Paytm / Show QR Code</span>
-                </button>
-
                 {/* QR Code display */}
-                {showPaytmQr && (
-                  <div id="qr-container" className="pt-3 border-t border-slate-200/60 space-y-2.5 bg-white p-3.5 rounded-xl border border-slate-200">
-                    <p className="text-xs font-bold text-slate-800">Scan or Screenshot QR Code to Pay:</p>
-                    <div className="flex justify-center">
-                      <img
-                        id="qr-image"
-                        src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`upi://pay?pa=${OWNER_UPI_ID}&pn=${encodeURIComponent(SHOP_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent("Quality Sweets Order")}`)}`}
-                        alt="UPI QR Code"
-                        className="w-44 h-44 border border-slate-300 rounded-xl p-1.5 bg-white shadow-sm"
-                      />
-                    </div>
-                    <p className="text-[11px] text-slate-600 font-mono">
-                      UPI ID: <strong className="text-slate-900">{OWNER_UPI_ID}</strong> ({SHOP_NAME})
-                    </p>
-
-                    {/* Screenshot Note in Hindi and English */}
-                    <div className="bg-sky-50 border border-sky-200 rounded-xl p-2.5 text-center space-y-1">
-                      <p className="text-xs font-bold text-sky-900">
-                        📸 QR कोड का स्क्रीनशॉट लें और पेमेंट करें
-                      </p>
-                      <p className="text-[11px] font-bold text-sky-800">
-                        Take a screenshot of QR code and pay payment
-                      </p>
-                      <p className="text-[10px] text-sky-600 italic">
-                        (Paytm, PhonePe, Google Pay ya kisi bhi UPI App se scan karke pay karein)
-                      </p>
-                    </div>
+                <div id="qr-container" className="pt-3 border-t border-slate-200/60 space-y-2.5 bg-white p-3.5 rounded-xl border border-slate-200">
+                  <p className="text-xs font-bold text-slate-800">Scan or Screenshot QR Code to Pay:</p>
+                  <div className="flex justify-center">
+                    <img
+                      id="qr-image"
+                      src={`https://api.qrserver.com/v1/create-qr-code/?size=220x220&data=${encodeURIComponent(`upi://pay?pa=${OWNER_UPI_ID}&pn=${encodeURIComponent(SHOP_NAME)}&am=${total}&cu=INR&tn=${encodeURIComponent("Quality Sweets Order")}`)}`}
+                      alt="UPI QR Code"
+                      className="w-44 h-44 border border-slate-300 rounded-xl p-1.5 bg-white shadow-sm"
+                    />
                   </div>
-                )}
+                  <p className="text-[11px] text-slate-600 font-mono">
+                    UPI ID: <strong className="text-slate-900">{OWNER_UPI_ID}</strong> ({SHOP_NAME})
+                  </p>
+
+                  {/* Screenshot Note in Hindi and English */}
+                  <div className="bg-sky-50 border border-sky-200 rounded-xl p-2.5 text-center space-y-1">
+                    <p className="text-xs font-bold text-sky-900">
+                      📸 QR कोड का स्क्रीनशॉट लें और पेमेंट करें
+                    </p>
+                    <p className="text-[11px] font-bold text-sky-800">
+                      Take a screenshot of QR code and pay payment
+                    </p>
+                    <p className="text-[10px] text-sky-600 italic">
+                      (Paytm, PhonePe, Google Pay ya kisi bhi UPI App se scan karke pay karein)
+                    </p>
+                  </div>
+                </div>
 
                 <p className="text-[10px] text-slate-500">🔒 Direct UPI Payment (0% Extra Charge)</p>
+              </div>
+
+              {/* Instructions Notice Banner in Hindi & English */}
+              <div className="bg-amber-50 border border-amber-300 rounded-2xl p-3 shadow-sm space-y-1.5 text-left" id="payment-whatsapp-instructions">
+                <div className="flex items-start gap-2">
+                  <span className="text-base leading-none">⚠️</span>
+                  <div className="space-y-1 text-xs">
+                    <p className="font-bold text-amber-900 leading-snug">
+                      🇮🇳 <span className="underline decoration-amber-400">महत्वपूर्ण सूचना (Important Note):</span>
+                    </p>
+                    <p className="text-amber-800 font-semibold leading-relaxed">
+                      पहले Payment करें, उसके बाद नीचे दिए बटन पर क्लिक करके Order Details और Payment Proof Screenshot भेजें।
+                    </p>
+                    <p className="text-amber-700 text-[11px] leading-relaxed pt-0.5 border-t border-amber-200/60">
+                      First complete payment, then click the button below to send Order Details and Payment Proof Screenshot on WhatsApp.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Order WhatsApp Direct Buttons (Step 2) */}
+              <div className="space-y-2 pt-1" id="order-whatsapp-buttons-container">
+                <span className="text-xs font-bold text-slate-800 block text-center">
+                  👇 Step 2: Click button & send Order Details + Payment Screenshot on WhatsApp:
+                </span>
+                <div className="flex flex-col gap-3" id="order-buttons">
+                  <button
+                    type="button"
+                    id="order-btn-owner1"
+                    onClick={() => sendDirectOrder('918171069007')}
+                    className="wa-btn py-3.5 px-4 bg-[#25D366] hover:bg-[#1ebd59] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    📱 Send Order to Owner 1
+                  </button>
+
+                  <div className="flex justify-center my-1">
+                    <img
+                      src="https://lh3.googleusercontent.com/d/1a8efLsRwgYecB031JAgVh70ApLHgI13T"
+                      alt="WhatsApp Order Guide"
+                      referrerPolicy="no-referrer"
+                      className="max-h-28 object-contain rounded-xl shadow-sm border border-slate-200/60 bg-white p-1"
+                    />
+                  </div>
+
+                  <button
+                    type="button"
+                    id="order-btn-owner2"
+                    onClick={() => sendDirectOrder('916398682424')}
+                    className="wa-btn wa-btn-2 py-3.5 px-4 bg-[#128C7E] hover:bg-[#0e7065] text-white font-bold text-xs rounded-xl shadow-md transition-all flex items-center justify-center gap-2 cursor-pointer"
+                  >
+                    📱 Send Order to Owner 2
+                  </button>
+                </div>
               </div>
             </div>
           </form>
